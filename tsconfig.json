@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    // 重定向输出目录。
+    "outDir": "dist",
+    // 指定生成哪个模块系统代码
+    "module": "esnext",
+    // 指定ECMAScript目标版本
+    "target": "es5",
+    // 编译过程中需要引入的库文件的列表
+    "lib": ["es6", "dom"],
+    // 生成相应的 .map文件
+    "sourceMap": true,
+    // 允许编译javascript文件。
+    "allowJs": true,
+    // react模式会生成 React.createElement，在使用前不需要再进行转换操作了，输出文件的扩展名为 .js
+    "jsx": "react",
+    // 模块解析策略
+    "moduleResolution": "node",
+    // 指定文件输入的根目录，仅用来控制输出的目录结构
+    "rootDir": "src",
+    // 禁止对同一个文件的不一致的引用
+    "forceConsistentCasingInFileNames": true,
+    // 不是函数的所有返回路径都有返回值时报错。
+    "noImplicitReturns": true,
+    // 当 this表达式的值为 any类型的时候，生成一个错误
+    "noImplicitThis": true,
+    // 在表达式和声明上有隐含的 any类型时报错。
+    "noImplicitAny": true,
+    // 在严格的 null检查模式下， null和 undefined值不包含在任何类型里，只允许用它们自己和 any来赋值（有个例外， undefined可以赋值到 void）
+    "strictNullChecks": true,
+    // 阻止 --noImplicitAny对缺少索引签名的索引对象报错
+    "suppressImplicitAnyIndexErrors": true,
+    // 若有未使用的局部变量则抛错。
+    "noUnusedLocals": true,
+    // 启用实验性的ES装饰器。
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "react-jss/*": ["typings/react-jss/*"],
+      "isomorphic-style-loader/*": ["typings/isomorphic-style-loader/*"]
+    },
+    "typeRoots": ["./typings", "./node_modules/@types"]
+  },
+  "include": ["src/**/*", "typings/**/*"],
+  "exclude": ["node_modules", "build", "server"]
+}
