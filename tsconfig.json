@@ -36,8 +36,7 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "react-jss/*": ["typings/react-jss/*"],
-      "isomorphic-style-loader/*": ["typings/isomorphic-style-loader/*"]
+      "babel-plugin-universal-import/*": ["typings/babel-plugin-universal-import/*"]
     },
     "typeRoots": ["./typings", "./node_modules/@types"]
   },

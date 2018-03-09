@@ -5,8 +5,8 @@ const rm = require('rimraf')
 const path = require('path')
 const chalk = require('chalk')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config.prod')
-const webpackServerConfig = require('./webpack.config.server')
+const webpackConfig = require('./webpack.client.prod')
+const webpackServerConfig = require('./webpack.server.prod')
 
 const spinner = ora('building for production...').start()
 
@@ -18,7 +18,7 @@ rm(path.join(__dirname, '../dist'), err => {
     process.stdout.write(stats.toString({
       colors: true,
       modules: false,
-      children: false, // if you are using ts-loader, setting this to true will make tyescript errors show up during build
+      children: true, // 使用ts-loader时，设置children为true会在打包的时候显示typescript的错误
       chunks: false,
       chunkModules: false
     }) + '\n\n')
@@ -41,7 +41,7 @@ rm(path.join(__dirname, '../dist'), err => {
     process.stdout.write(stats.toString({
       colors: true,
       modules: false,
-      children: true, // if you are using ts-loader, setting this to true will make tyescript errors show up during build
+      children: true,
       chunks: false,
       chunkModules: false
     }) + '\n\n')
