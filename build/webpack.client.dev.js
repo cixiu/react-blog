@@ -125,7 +125,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new WriteFilePlugin(), // 强制将打包在内存中的文件写入硬盘，便于查看打包的文件
+    // new WriteFilePlugin(), // 强制将打包在内存中的文件写入硬盘，便于查看打包的文件
     new ExtractCssChunks({
       filename: 'css/[name].css'
     }),

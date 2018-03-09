@@ -21,9 +21,10 @@ const createApp = (store: Store<{}>) => (
 // 接收一个对象 {clientStats, serverStats, outputPath}
 const serverRender = ({ clientStats }: {clientStats: Stats}) => async (req: Request, res: Response) => {
   const store = await configureStore(req, res)
+  // 没有store表示发生了重定向 应该直接返回 等待重定向的路径请求
   if (!store) {
     return
-  } // no store means redirect was already served
+  }
 
   const app = createApp(store)
   const appString = ReactDOMServer.renderToString(app)
@@ -44,8 +45,8 @@ const serverRender = ({ clientStats }: {clientStats: Stats}) => async (req: Requ
           ${styles}
         </head>
         <body>
-          <script>window.REDUX_STATE = ${stateJson}</script>
           <div id="root">${appString}</div>
+          <script>window.REDUX_STATE = ${stateJson}</script>
           ${cssHash}
           <script type='text/javascript' src='/static/vendor.js'></script>
           ${js}
