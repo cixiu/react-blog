@@ -19,7 +19,7 @@
   z-index: 100;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
-  transition: all .2s;
+  transition: all 0.2s;
   transform: translateZ(0);
 }
 .nav-list {
@@ -46,7 +46,7 @@
     padding: 0 12px 0 0;
   }
   &:hover {
-    color: $color-primary
+    color: $color-primary;
   }
   @media (max-width: 960px) {
     &:first-child {
@@ -61,5 +61,17 @@
   background: #fff;
   @media (max-width: 768px) {
     width: 100%;
+  }
+}
+:global {
+  .ant-back-top {
+    z-index: 998;
+    right: 24px;
+  }
+  .ant-back-top-content {
+    background-color: $color-primary;
+  }
+  .ant-back-top-content:hover{
+    background-color: #40a9ff;
   }
 }

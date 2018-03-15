@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'redux-first-router-link'
-// import { Layout } from 'antd'
+import { BackTop } from 'antd'
 import Router from '../Router/Router'
 import Aside from '../Aside/Aside'
 import * as styles from './index.scss'
@@ -57,6 +57,7 @@ class MContent extends React.Component<IProps, {}> {
             <Router />
           </main>
           <Aside />
+          <BackTop />
         </div>
       </div>
     )

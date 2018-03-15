@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Login from '../Login/Login'
 import * as styles from './index.scss'
 
 class Aside extends React.Component {
@@ -7,51 +8,7 @@ class Aside extends React.Component {
   render() {
     return (
       <aside className={styles.aside}>
-        侧边蓝
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <Login />
       </aside>
     )
   }
