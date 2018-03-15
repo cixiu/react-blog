@@ -4,7 +4,7 @@ import * as types from '../actionTypes/routerTypes'
 export const goToPage = (type: string, category?: string) => {
   return {
     type,
-    payload: category && { category }
+    payload: category ? { category } : {}
   }
 }
 
@@ -12,8 +12,8 @@ export const goHome = () => ({
   type: types.HOME
 })
 
-export const goMovie = () => ({
-  type: types.MOVIE
+export const goCategory = () => ({
+  type: types.CATEGORY
 })
 
 export const goMusic = () => ({

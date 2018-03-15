@@ -1,7 +1,27 @@
 import { LocationState } from 'redux-first-router'
+interface ICategory {
+  _id: string
+  title: string
+}
+
+export interface IArticleList {
+  category: ICategory[]
+  title: string
+  screenshot: string
+  content: string
+  description: string
+  author: string
+  id: number
+  create_time: string
+  last_update_time: string
+  views_count: number
+  comment_count: number
+}
 
 export interface IStoreState {
   page: string
-  count: number
+  hasMore: boolean
+  isLoading: boolean
+  articleList: IArticleList[] | any[]
   location: LocationState
 }

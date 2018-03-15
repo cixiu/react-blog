@@ -1,19 +1,16 @@
 import { hot } from 'react-hot-loader'
 import * as React from 'react'
-// import Button from 'antd/lib/button'
-// import 'antd/lib/button/style/index.css'
-import { Button } from 'antd'
-import Header from './components/Header/Header'
-import Switch from './components/Switch/Switch'
+import { Layout } from 'antd'
+import MHeader from './components/MHeader/MHeader'
+import MContent from './components/MContent/MContent'
 
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <Header />
-        Hello World!!!! <Button type="primary">antd</Button>
-        <Switch />
-      </div>
+      <Layout className="view-container" style={{ background: '#f5f5f5' }}>
+        <MHeader />
+        <MContent />
+      </Layout>
     )
   }
 }

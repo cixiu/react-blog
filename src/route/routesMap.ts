@@ -1,22 +1,23 @@
-import { addCount } from '../store/actions/index'
+import { redirect } from 'redux-first-router'
 import * as types from '../store/actionTypes/routerTypes'
+// import { Dispatch } from 'react-redux'
+// import { IStoreState } from '../store/types'
+import { thunkArticleList } from './thunk'
+import { goToPage } from '../store/actions/routerActions'
 
 const routesMap = {
   [types.HOME]: {
     path: '/',
     thunk: async (dispatch: any, getState: any) => {
-      const { count } = getState()
-      if (count) {
-        return
-      }
-      dispatch(addCount(10))
+      dispatch(redirect(goToPage(types.CATEGORY, 'all')))
     }
   },
   [types.MOVIE]: '/movie',
   [types.MUSIC]: '/music',
   [types.CATEGORY]: {
-    path: '/category/:category'
-  },
+    path: '/category/:category',
+    thunk: thunkArticleList
+  }
 }
 
 export default routesMap

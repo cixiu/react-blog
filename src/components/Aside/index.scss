@@ -1,0 +1,12 @@
+.aside {
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-width: 240px;
+  min-width: 240px;
+  width: 240px;
+  background: #fff;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}

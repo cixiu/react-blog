@@ -96,8 +96,17 @@ module.exports = {
           loader: 'css-loader/locals',
           options: {
             modules: true,
-            localIdentName: '[name]-[local]-[hash:base64:5]'   // localIdentName格式必须与客户端的css-loader设置一样
+            localIdentName: '[name]-[local]-[hash:base64:5]',   // localIdentName格式必须与客户端的css-loader设置一样
+            cameCase: true
           }
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 4096,
+          name: 'images/[name].[ext]?[hash]'
         }
       }
     ]

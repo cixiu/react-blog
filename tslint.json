@@ -16,6 +16,7 @@
     "no-trailing-whitespace": false,
     "no-empty": false,
     "no-empty-interface": false,
-    "jsx-curly-spacing": true
+    "jsx-curly-spacing": true,
+    "jsx-key": false
   }
 }

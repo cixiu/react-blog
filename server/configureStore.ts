@@ -20,7 +20,7 @@ interface IState {
 export default async (req: Request, res: Response) => {
   const preLoadedState = {} // onBeforeChange will authenticate using this
 
-  const history = createHistory({ initialEntries: [req.path] })
+  const history = createHistory({ initialEntries: [req.originalUrl] })
   const { store, thunk } = configureStore(history, preLoadedState)
 
   // if not using onBeforeChange + jwTokens, you can also async authenticate

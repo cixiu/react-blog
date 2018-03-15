@@ -88,7 +88,7 @@ module.exports = {
             options: {
               importLoaders: 2,
               modules: true,
-              localIdentName: '[name]-[local]-[hash:base64:5]',
+              localIdentName: '[name]__[local]--[hash:base64:5]',
               namedExport: true,
               camelCase: true,
               slient: true,
@@ -115,6 +115,14 @@ module.exports = {
             loader: 'sass-loader'
           }
         ])
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 4096,
+          name: 'images/[name].[ext]?[hash]'
+        }
       }
     ]
   },

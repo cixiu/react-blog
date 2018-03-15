@@ -8,14 +8,12 @@ interface IRouterAction {
 
 // key: value 对应的是 一个路由对应一个路由组件
 const routerComponents = {
-  [types.HOME]: 'Home',
-  [types.MOVIE]: 'Movie',
-  [types.MUSIC]: 'Music',
+  [types.HOME]: 'Category',
   [types.CATEGORY]: 'Category',
   [NOT_FOUND]: 'NotFound'
 }
 
-const page = (state = 'Home', action: IRouterAction) => {
+const page = (state = 'Category', action: IRouterAction) => {
   return routerComponents[action.type] || state
 }
 
