@@ -18,7 +18,9 @@ interface IState {
 }
 
 export default async (req: Request, res: Response) => {
-  const preLoadedState = {} // onBeforeChange will authenticate using this
+  const userInfo = req.session.userInfo
+  console.log(req.session)
+  const preLoadedState = { userInfo: userInfo ? userInfo : {} } // onBeforeChange will authenticate using this
 
   const history = createHistory({ initialEntries: [req.originalUrl] })
   const { store, thunk } = configureStore(history, preLoadedState)

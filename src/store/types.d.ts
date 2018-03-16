@@ -18,10 +18,20 @@ export interface IArticleList {
   comment_count: number
 }
 
+export interface IUserInfo {
+  username: string
+  id: number
+  avatar: string
+  creatAt: number
+  create_time: string
+  create_address: string
+}
+
 export interface IStoreState {
   page: string
   hasMore: boolean
   isLoading: boolean
   articleList: IArticleList[] | any[]
   location: LocationState
+  userInfo: IUserInfo
 }

@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware, compose, combineReducers, StoreEnhancer } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'
 import { connectRoutes } from 'redux-first-router'
 import { History } from 'history'
@@ -21,7 +22,7 @@ const configureStore = (history: History, initialState: {}) => {
   )
 
   const rootReducer = combineReducers({ ...reducers, location })
-  const middlewares = applyMiddleware(middleware)
+  const middlewares = applyMiddleware(middleware, thunkMiddleware)
   const enhancers = composeEnhancers(enhancer, middlewares)
   const store = createStore(rootReducer, initialState, enhancers)
   return { store, thunk }

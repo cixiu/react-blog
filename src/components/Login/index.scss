@@ -1,13 +1,23 @@
 @import '../../common/scss/variable.scss';
 
-.login {
+:global {
+  .aside-box {
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 2px;
+    background: #fff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+}
+/* .login {
   margin-bottom: 20px;
   padding: 16px;
   border-radius: 2px;
   background: #fff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   overflow: hidden;
-}
+} */
 .title {
   margin-bottom: 6px;
   font-size: 14px;
@@ -25,7 +35,7 @@
 .input {
   width: 100%;
   padding: 7px 8px;
-  border: 1px solid  $color-background;
+  border: 1px solid $color-background;
   border-radius: 2px;
   background: #fafafa;
   outline: none;

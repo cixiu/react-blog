@@ -1,0 +1,19 @@
+@import '../../common/scss/variable.scss';
+
+.user-name {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.info-list {
+  display: inline-block;
+  margin-left: 14px;
+  li {
+    font-weight: 600;
+    color: $color-text;
+  }
+}
+.user-create:not(:last-child) {
+  margin-bottom: 10px;
+}

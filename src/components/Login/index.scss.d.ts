@@ -1,4 +1,3 @@
-export const login: string;
 export const title: string;
 export const slogan: string;
 export const inputBox: string;

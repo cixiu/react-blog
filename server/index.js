@@ -1,5 +1,7 @@
 require('babel-polyfill')
 const express = require('express')
+const session = require('express-session')
+const bodyParser = require('body-parser')
 const favicon = require('serve-favicon')
 const path = require('path')
 const webpack = require('webpack')
@@ -9,6 +11,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
 const clientConfig = require('../build/webpack.client.dev')
 const serverConfig = require('../build/webpack.server.dev')
+const proxyUser = require('./proxy')
 
 // const apiServerHost = 'http://127.0.0.1:3001'
 // process.env.BASE_URL = apiServerHost
@@ -19,9 +22,26 @@ const app = express()
 
 app.use(favicon(path.join(__dirname, '../favicon.ico')))
 
+app.use(bodyParser.json())
+
+app.use(
+  session({
+    name: 'react-blog',
+    secret: 'this is a blog manage system writed by cixiu',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000 // 最大保存时间一天
+    }
+  })
+)
+
+app.use('/api/user', proxyUser)
+
 app.use('/api', proxy({
-  target: 'http://localhost:3001',
-  changeOrigin: true
+  target: 'http://localhost:3001'
 }))
 
 if (DEV) {

@@ -16,8 +16,10 @@
     "antd": "^3.2.3",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.2",
     "dateformat": "^3.0.3",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "history": "^4.7.2",
     "query-string": "^5.1.0",
     "react": "^16.2.0",
@@ -31,6 +33,7 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-first-router": "^0.0.16-next",
     "redux-first-router-link": "^1.4.2",
+    "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "serve-favicon": "^2.4.5",
     "webpack-flush-chunks": "^1.2.3"
