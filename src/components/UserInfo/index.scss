@@ -7,11 +7,14 @@
   font-size: 14px;
 }
 .info-list {
-  display: inline-block;
   margin-left: 14px;
   li {
+    width: 154px;
     font-weight: 600;
     color: $color-text;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 .user-create:not(:last-child) {

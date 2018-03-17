@@ -2,10 +2,10 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import Link /* { NavLink } */ from 'redux-first-router-link'
 import { Layout, Row, Col, Button, Input, Icon } from 'antd'
+import Login from '../Login/Login'
 import { goToPage } from '../../store/actions/routerActions'
 import { IStoreState } from '../../store/types'
 import * as styles from './index.scss'
-import { LocationState } from 'redux-first-router'
 
 const logo = require('../../common/images/react.svg')
 const { Header } = Layout
@@ -16,12 +16,14 @@ const { Search } = Input
 interface IProps {}
 interface IReduxInjectProps extends IProps {
   page: string
-  location: LocationState
+  location: IStoreState['location']
+  userInfo: IStoreState['userInfo']
   goToPage: (type: string, category?: string) => void
 }
 
 class MHeader extends React.Component<IProps, {}> {
   state = {
+    visible: false,
     navList: [
       { path: '/', text: '首页', exact: true },
       { path: '/movie', text: '电影' },
@@ -35,6 +37,12 @@ class MHeader extends React.Component<IProps, {}> {
 
   get injected() {
     return this.props as IReduxInjectProps
+  }
+
+  showModal = () => {
+    this.setState({
+      visible: true
+    })
   }
 
   render() {
@@ -73,12 +81,24 @@ class MHeader extends React.Component<IProps, {}> {
                   justifyContent: 'flex-end'
                 }}
               >
-                <Button type="primary" size="large">
-                  登录
-                </Button>
-                <Button type="primary" size="large">
-                  注册
-                </Button>
+                {!this.injected.userInfo.username && (
+                  <div className="login-or-register">
+                    <Button
+                      type="primary"
+                      size="large"
+                      onClick={this.showModal}
+                    >
+                      登录
+                    </Button>
+                    <Button
+                      type="primary"
+                      size="large"
+                      onClick={this.showModal}
+                    >
+                      注册
+                    </Button>
+                  </div>
+                )}
                 <Button
                   type="primary"
                   href="https://github.com/cixiu/react-blog"
@@ -90,31 +110,23 @@ class MHeader extends React.Component<IProps, {}> {
                 </Button>
               </Col>
             </Row>
-            {/* <Menu
-              mode="horizontal"
-              defaultSelectedKeys={[`${this.injected.location.pathname}`]}
-              style={{ lineHeight: '64px' }}
-            >
-              <SubMenu title="首页" style={{ display: 'none' }}>
-                <Item>移动端显示</Item>
-              </SubMenu>
-              {navList.map(item => (
-                <Item key={item.path}>
-                  <NavLink exact={!!item.exact} to={item.path} activeStyle={{color: '#1890ff'}}>{item.text}</NavLink>
-                </Item>
-              ))}
-            </Menu> */}
           </header>
         </Header>
+        {this.state.visible && (
+          <div className={styles.loginModalBox}>
+            <Login />
+          </div>
+        )}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ page, location }: IStoreState) => {
+const mapStateToProps = ({ page, location, userInfo }: IStoreState) => {
   return {
     page,
-    location
+    location,
+    userInfo
   }
 }
 

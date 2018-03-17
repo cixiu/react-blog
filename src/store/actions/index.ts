@@ -18,6 +18,11 @@ export const changeIsLoading = (flag: boolean) => ({
   flag
 })
 
+export const addUserId = (id: number) => ({
+  type: types.USER_ID,
+  id
+})
+
 export const addUserInfo = (info: object) => ({
   type: types.USER_INFO,
   info
@@ -30,6 +35,7 @@ export const getUserData = (username: string, password: string) => async (
   try {
     const res = await login(username, password)
     if (res.code === 0) {
+      dispatch(addUserId(res.data.id))
       dispatch(addUserInfo(res.data))
     }
     return Promise.resolve(res)

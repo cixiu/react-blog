@@ -4,6 +4,7 @@ import { NOT_FOUND, LocationState } from 'redux-first-router'
 import { Request, Response } from 'express'
 
 import configureStore from '../src/store'
+import { IStoreState } from '../src/store/types'
 
 const doesRedirect = ({ kind, pathname }: LocationState, res: Response) => {
   if (kind === 'redirect') {
@@ -18,17 +19,17 @@ interface IState {
 }
 
 export default async (req: Request, res: Response) => {
-  const userInfo = req.session.userInfo
-  console.log(req.session)
-  const preLoadedState = { userInfo: userInfo ? userInfo : {} } // onBeforeChange will authenticate using this
+  const userId = Number(req.signedCookies.userId)
+  console.log(userId)
+  // 在onBeforeChange中使用userId来获取用户信息
+  // 当然如果不使用onBeforeChange + userId,
+  // 你也可以直接将用户信息直接传入cookie中，在从cookie中取出来 比如: req.signedCookies.userInfo
+  const preLoadedState = { userId: userId ? userId : 0 } as IStoreState
 
   const history = createHistory({ initialEntries: [req.originalUrl] })
   const { store, thunk } = configureStore(history, preLoadedState)
 
-  // if not using onBeforeChange + jwTokens, you can also async authenticate
-  // here against your db (i.e. using req.cookies.sessionId)
-
-  let location = (store.getState() as IState).location
+  let location = (store.getState() as IStoreState).location
   if (doesRedirect(location, res)) {
     return false
   }
@@ -38,7 +39,7 @@ export default async (req: Request, res: Response) => {
 
   await thunk(store) // THE PAYOFF BABY!
 
-  location = (store.getState() as IState).location // remember: state has now changed
+  location = (store.getState() as IStoreState).location // remember: state has now changed
   if (doesRedirect(location, res)) {
     return false
   } // only do this again if ur thunks have redirects

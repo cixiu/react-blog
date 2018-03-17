@@ -2,6 +2,7 @@ require('babel-polyfill')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const favicon = require('serve-favicon')
 const path = require('path')
 const webpack = require('webpack')
@@ -23,21 +24,23 @@ const app = express()
 app.use(favicon(path.join(__dirname, '../favicon.ico')))
 
 app.use(bodyParser.json())
+app.use(cookieParser('this is a blog writed by cixiu'))
 
-app.use(
-  session({
-    name: 'react-blog',
-    secret: 'this is a blog manage system writed by cixiu',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      maxAge: 24 * 60 * 60 * 1000 // 最大保存时间一天
-    }
-  })
-)
+// app.use(
+//   session({
+//     name: 'react-blog',
+//     secret: 'this is a blog writed by cixiu',
+//     resave: true,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false,
+//       maxAge: 24 * 60 * 60 * 1000 * 30 // 最大保存时间一天
+//     }
+//   })
+// )
 
+// 代理登录接口 存储session 保持登录状态
 app.use('/api/user', proxyUser)
 
 app.use('/api', proxy({

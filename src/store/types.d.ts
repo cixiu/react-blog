@@ -33,5 +33,6 @@ export interface IStoreState {
   isLoading: boolean
   articleList: IArticleList[] | any[]
   location: LocationState
+  userId: number
   userInfo: IUserInfo
 }
