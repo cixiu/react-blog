@@ -2,8 +2,8 @@ import createHistory from 'history/createMemoryHistory'
 import { NOT_FOUND, LocationState } from 'redux-first-router'
 
 import { Request, Response } from 'express'
-
 import configureStore from '../src/store'
+import { getUserInfoThunk } from '../src/store/actions'
 import { IStoreState } from '../src/store/types'
 
 const doesRedirect = ({ kind, pathname }: LocationState, res: Response) => {
@@ -20,7 +20,6 @@ interface IState {
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.signedCookies.userId)
-  console.log(userId)
   // 在onBeforeChange中使用userId来获取用户信息
   // 当然如果不使用onBeforeChange + userId,
   // 你也可以直接将用户信息直接传入cookie中，在从cookie中取出来 比如: req.signedCookies.userInfo
@@ -28,21 +27,26 @@ export default async (req: Request, res: Response) => {
 
   const history = createHistory({ initialEntries: [req.originalUrl] })
   const { store, thunk } = configureStore(history, preLoadedState)
+  // console.log(store.getState())
 
   let location = (store.getState() as IStoreState).location
   if (doesRedirect(location, res)) {
     return false
   }
 
-  // using redux-thunk perhaps request and dispatch some app-wide state as well, e.g:
-  // await Promise.all([store.dispatch(myThunkA), store.dispatch(myThunkB)])
+  // 可以使用redux-thunk去请求一些全局的state，需要一开始就使用到的
+  // 使用 await Promise.all([store.dispatch(myThunkA), store.dispatch(myThunkB)])
+  // 将存在cookie中的userId取出用来获取用户信息
+  const state = store.getState()
+  await Promise.all([
+    store.dispatch(getUserInfoThunk(state.userId)),
+    thunk(store)
+  ])
 
-  await thunk(store) // THE PAYOFF BABY!
-
-  location = (store.getState() as IStoreState).location // remember: state has now changed
+  location = (store.getState() as IStoreState).location
   if (doesRedirect(location, res)) {
     return false
-  } // only do this again if ur thunks have redirects
+  }
 
   const status = location.type === NOT_FOUND ? 404 : 200
   res.status(status)

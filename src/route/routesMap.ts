@@ -12,11 +12,13 @@ const routesMap = {
       dispatch(redirect(goToPage(types.CATEGORY, 'all')))
     }
   },
-  [types.MOVIE]: '/movie',
-  [types.MUSIC]: '/music',
   [types.CATEGORY]: {
     path: '/category/:category',
     thunk: thunkArticleList
+  },
+  [types.DETAIL]: {
+    path: '/detail/:id',
+    // thunk: thunkArticleList
   }
 }
 

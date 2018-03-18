@@ -10,6 +10,7 @@ interface IRouterAction {
 const routerComponents = {
   [types.HOME]: 'Category',
   [types.CATEGORY]: 'Category',
+  [types.DETAIL]: 'Detail',
   [NOT_FOUND]: 'NotFound'
 }
 

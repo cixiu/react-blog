@@ -2,11 +2,11 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Button, message } from 'antd'
 import * as styles from './index.scss'
-import { getUserData } from '../../store/actions'
+import { postLoginThunk } from '../../store/actions'
 
 interface IProps {}
 interface IReduxInjectedProps extends IProps {
-  getUserData: (username: string, password: string) => any
+  postLoginThunk: (username: string, password: string) => any
 }
 
 class Login extends React.Component<IProps, {}> {
@@ -30,11 +30,12 @@ class Login extends React.Component<IProps, {}> {
       message.error('密码不能小于6位！')
     } else {
       this.setState({ loading: true })
-      const res = await this.injected.getUserData(username, password)
+      const res = await this.injected.postLoginThunk(username, password)
       if (res.code === 0) {
         message.success(res.message)
       } else {
         message.info(res.message)
+        this.setState({ loading: false })
       }
     }
   }
@@ -78,7 +79,7 @@ class Login extends React.Component<IProps, {}> {
   }
 }
 
-const mapDispatchToProps = { getUserData }
+const mapDispatchToProps = { postLoginThunk }
 
 const mergeProps = (
   stateProps: object,

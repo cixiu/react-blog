@@ -2,7 +2,7 @@ import * as React from 'react'
 import universal from 'react-universal-component'
 import importCss from 'babel-plugin-universal-import/importCss'
 import { connect } from 'react-redux'
-import Loading from '../Loading/Loading'
+import { SkeletonLoading } from '../Loading/Loading'
 import { IStoreState } from '../../store/types'
 
 interface IWebpackRequire extends NodeRequire {
@@ -23,7 +23,7 @@ const load = (props: any) => {
 const UniversalComponent = universal(load, {
   minDelay: 500,
   alwaysDelay: true,
-  loading: Loading,
+  loading: SkeletonLoading,
   chunkName: props => `${props.page}-${props.page}`,
   resolve: props => {
     return require.resolveWeak(`../../pages/${props.page}/${props.page}`)

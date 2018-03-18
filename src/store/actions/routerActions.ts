@@ -16,8 +16,9 @@ export const goCategory = () => ({
   type: types.CATEGORY
 })
 
-export const goMusic = () => ({
-  type: types.MUSIC
+export const goDetail = (id: number) => ({
+  type: types.DETAIL,
+  payload: { id }
 })
 
 // export const

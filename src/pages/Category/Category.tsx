@@ -7,7 +7,7 @@ import { Icon } from 'antd'
 import * as dateFormat from 'dateformat'
 import * as InfiniteScroll from 'react-infinite-scroller'
 
-import { /* Loading */ SkeletonLoading } from '../../components/Loading/Loading'
+import { SkeletonLoading } from '../../components/Loading/Loading'
 import * as styles from '../../styles/Category/Category.scss'
 import { IStoreState, IArticleList } from '../../store/types'
 import { getArticleList } from '../../api/article'
@@ -156,7 +156,7 @@ class Category extends React.Component<IProps, IState> {
             ))}
           </ul>
         </header>
-        {articleList.length > 0 ? (
+        {articleList.length > 0 && (
           <InfiniteScroll
             initialLoad={false}
             hasMore={!this.state.loading && this.injected.hasMore}
@@ -171,7 +171,7 @@ class Category extends React.Component<IProps, IState> {
               {!this.injected.isLoading &&
                 articleList.map(article => (
                   <li className={styles.listItem} key={article.id}>
-                    <Link to={`/detail/${article.id}`}>
+                    <Link to={`/detail/${article.id}`} target="__blank">
                       <div className={styles.articel}>
                         {article.screenshot && (
                           <div className={styles.articelScreenshotContainer}>
@@ -224,7 +224,8 @@ class Category extends React.Component<IProps, IState> {
             {this.state.loading &&
               !this.injected.isLoading && <SkeletonLoading />}
           </InfiniteScroll>
-        ) : (
+        )}
+        {(articleList.length === 0 && !this.injected.isLoading) && (
           <div className={styles.noData}>这个分类暂时还没有文章</div>
         )}
       </div>

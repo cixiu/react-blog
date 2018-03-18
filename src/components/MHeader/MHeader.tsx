@@ -1,37 +1,30 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import Link /* { NavLink } */ from 'redux-first-router-link'
-import { Layout, Row, Col, Button, Input, Icon } from 'antd'
-import Login from '../Login/Login'
-import { goToPage } from '../../store/actions/routerActions'
+import Link from 'redux-first-router-link'
+import { Layout, Row, Col, Button, Input, Icon, message } from 'antd'
+import { postLoginThunk } from '../../store/actions'
 import { IStoreState } from '../../store/types'
 import * as styles from './index.scss'
 
 const logo = require('../../common/images/react.svg')
 const { Header } = Layout
 const { Search } = Input
-// const SubMenu = Menu.SubMenu
-// const Item = Menu.Item
 
 interface IProps {}
 interface IReduxInjectProps extends IProps {
   page: string
   location: IStoreState['location']
   userInfo: IStoreState['userInfo']
-  goToPage: (type: string, category?: string) => void
+  postLoginThunk: (username: string, password: string) => any
 }
 
 class MHeader extends React.Component<IProps, {}> {
+  UserName: HTMLInputElement | null = null
+  Password: HTMLInputElement | null = null
+
   state = {
     visible: false,
-    navList: [
-      { path: '/', text: '首页', exact: true },
-      { path: '/movie', text: '电影' },
-      { path: '/music', text: '音乐' },
-      { path: '/category/html', text: 'HTML' },
-      { path: '/category/css', text: 'CSS' },
-      { path: '/category/javascript', text: 'Javascript' }
-    ]
+    loading: false
   }
   componentDidMount() {}
 
@@ -40,13 +33,34 @@ class MHeader extends React.Component<IProps, {}> {
   }
 
   showModal = () => {
-    this.setState({
-      visible: true
-    })
+    this.setState({ visible: true })
+  }
+
+  closeLoginBox = () => {
+    this.setState({ visible: false })
+  }
+
+  loginSubmit = async () => {
+    const username = this.UserName ? this.UserName.value.trim() : ''
+    const password = this.Password ? this.Password.value.trim() : ''
+    if (!username) {
+      message.error('用户名不能为空！')
+    } else if (password.length < 6) {
+      message.error('密码不能小于6位！')
+    } else {
+      this.setState({ loading: true })
+      const res = await this.injected.postLoginThunk(username, password)
+      if (res.code === 0) {
+        message.success(res.message)
+        this.setState({ visible: false })
+      } else {
+        message.info(res.message)
+        this.setState({ loading: false })
+      }
+    }
   }
 
   render() {
-    // const { navList } = this.state
     return (
       <div className={styles.mainHeaderContainer}>
         <Header className={styles.miniHeader}>
@@ -55,7 +69,7 @@ class MHeader extends React.Component<IProps, {}> {
               <img className={styles.logoImg} src={logo} alt="logo" />
             </Link>
             <Row type="flex" gutter={16} style={{ flex: 1 }}>
-              <Col xs={12} sm={8} md={8} lg={8}>
+              <Col xs={8} sm={8} md={8} lg={8}>
                 <Link to="/">
                   <Button type="primary" size="large">
                     首页
@@ -71,7 +85,7 @@ class MHeader extends React.Component<IProps, {}> {
                 />
               </Col>
               <Col
-                xs={12}
+                xs={16}
                 sm={16}
                 md={16}
                 lg={8}
@@ -114,7 +128,47 @@ class MHeader extends React.Component<IProps, {}> {
         </Header>
         {this.state.visible && (
           <div className={styles.loginModalBox}>
-            <Login />
+            <div className={styles.loginBox}>
+              <Icon
+                type="close"
+                className={styles.loginCloseIcon}
+                onClick={this.closeLoginBox}
+              />
+              <div className={styles.loginPanel}>
+                <h1 className={styles.title}>登录</h1>
+                <ul className={styles.inputGroup}>
+                  <li className={styles.inputBox}>
+                    <input
+                      className={styles.input}
+                      name="registerUsername"
+                      placeholder="请输入用户名"
+                      maxLength={20}
+                      ref={el => (this.UserName = el)}
+                    />
+                  </li>
+                  <li className={styles.inputBox}>
+                    <input
+                      className={styles.input}
+                      type="password"
+                      name="registerPassword"
+                      placeholder="请输入密码（不少于6位）"
+                      maxLength={64}
+                      ref={el => (this.Password = el)}
+                    />
+                  </li>
+                </ul>
+                <Button
+                  className={styles.btnSubmit}
+                  type="primary"
+                  size="large"
+                  loading={this.state.loading}
+                  onClick={this.loginSubmit}
+                >
+                  {this.state.loading ? '登录中...' : '登录'}
+                </Button>
+                <p className={styles.tip}>没有注册，登录会自动注册！</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -130,7 +184,7 @@ const mapStateToProps = ({ page, location, userInfo }: IStoreState) => {
   }
 }
 
-const mapDispatchToProps = { goToPage }
+const mapDispatchToProps = { postLoginThunk }
 
 const mergeProps = (
   stateProps: object,

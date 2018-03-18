@@ -1,5 +1,5 @@
 import * as types from '../actionTypes'
-import { login, /* getUserInfo */ } from '../../api/user'
+import { login, getUserInfo } from '../../api/user'
 import { Dispatch } from 'react-redux'
 import { IStoreState } from '../types'
 
@@ -28,7 +28,7 @@ export const addUserInfo = (info: object) => ({
   info
 })
 
-export const getUserData = (username: string, password: string) => async (
+export const postLoginThunk = (username: string, password: string) => async (
   dispatch: Dispatch<any>,
   getState: () => IStoreState
 ) => {
@@ -39,15 +39,21 @@ export const getUserData = (username: string, password: string) => async (
       dispatch(addUserInfo(res.data))
     }
     return Promise.resolve(res)
-    // if (loginInfo.code === 0) {
-    //   const res = await getUserInfo()
-    //   if (res.code === 0) {
-    //     dispatch(addUserInfo(res.data))
-    //   }
-    //   return Promise.resolve(res)
-    // } else {
-    //   return Promise.resolve(loginInfo)
-    // }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const getUserInfoThunk = (userId: number) => async (
+  dispatch: Dispatch<any>,
+  getState: () => IStoreState
+) => {
+  try {
+    const res = await getUserInfo(userId)
+    if (res.code === 0) {
+      dispatch(addUserInfo(res.data))
+    }
+    return Promise.resolve(res)
   } catch (err) {
     console.error(err)
   }
