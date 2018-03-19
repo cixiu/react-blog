@@ -1,16 +1,18 @@
 import { Dispatch } from 'react-redux'
 import { IStoreState } from '../store/types'
-import { getArticleList } from '../api/article'
+import { getArticleList, getArticleDetail } from '../api/article'
 import { LocationState } from 'redux-first-router'
 import {
   addArticleList,
   changeHasMore,
-  changeIsLoading
+  changeIsLoading,
+  addArticleDetail
 } from '../store/actions'
 
 interface ILocation extends LocationState {
   payload: {
     category?: string
+    id?: number
   }
   query?: {
     sort?: string
@@ -40,14 +42,27 @@ export const thunkArticleList = async (
     }
     dispatch(addArticleList(res.data))
   } else {
-    dispatch(addArticleList([]))
+    dispatch(addArticleList())
   }
   const endThunk = +new Date()
   console.log('数据初始化用时:' + (endThunk - startThunk) + 'ms')
   dispatch(changeIsLoading(false))
-  // setTimeout(() => {
-  //   const endThunk = +new Date()
-  //   console.log('用时:' + (endThunk - startThunk) + 'ms')
-  //   dispatch(changeIsLoading(false))
-  // }, 200)
+}
+
+export const thunkArticleDetail = async (
+  dispatch: Dispatch<any>,
+  getState: () => IStoreState
+) => {
+  const { location }: { location: ILocation } = getState()
+  const startThunk = +new Date()
+  dispatch(changeIsLoading(true))
+  const res = location.payload.id && await getArticleDetail(location.payload.id)
+  if (res.code === 0) {
+    dispatch(addArticleDetail(res.data))
+  } else {
+    dispatch(addArticleDetail())
+  }
+  const endThunk = +new Date()
+  console.log('数据初始化用时:' + (endThunk - startThunk) + 'ms')
+  dispatch(changeIsLoading(false))
 }

@@ -23,3 +23,16 @@ export const getArticleList = async ({offset = 0, limit = 10, category, sort }: 
     console.log(err)
   }
 }
+
+export const getArticleDetail = async (id: number) => {
+  try {
+    const res = await axios.get(`${baseUrl}/api/article/detail`, {
+      params: {
+        id
+      }
+    })
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}

@@ -9,7 +9,7 @@ import * as InfiniteScroll from 'react-infinite-scroller'
 
 import { SkeletonLoading } from '../../components/Loading/Loading'
 import * as styles from '../../styles/Category/Category.scss'
-import { IStoreState, IArticleList } from '../../store/types'
+import { IStoreState } from '../../store/types'
 import { getArticleList } from '../../api/article'
 import { addArticleList, changeHasMore } from '../../store/actions'
 
@@ -25,7 +25,7 @@ interface ILocation extends LocationState {
 interface IProps {}
 interface IReduxInjectedProps extends IProps {
   location: ILocation
-  articleList: IArticleList[]
+  articleList: IStoreState['articleList']
   hasMore: boolean
   isLoading: boolean
   addArticleList: (list: any[]) => void
@@ -171,7 +171,7 @@ class Category extends React.Component<IProps, IState> {
               {!this.injected.isLoading &&
                 articleList.map(article => (
                   <li className={styles.listItem} key={article.id}>
-                    <Link to={`/detail/${article.id}`} target="__blank">
+                    <Link to={`/detail/${article.id}`}>
                       <div className={styles.articel}>
                         {article.screenshot && (
                           <div className={styles.articelScreenshotContainer}>

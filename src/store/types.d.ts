@@ -4,11 +4,11 @@ interface ICategory {
   title: string
 }
 
-export interface IArticleList {
+export interface IArticleDetail {
   category: ICategory[]
   title: string
   screenshot: string
-  content: string
+  content?: string
   description: string
   author: string
   id: number
@@ -31,8 +31,9 @@ export interface IStoreState {
   page: string
   hasMore: boolean
   isLoading: boolean
-  articleList: IArticleList[] | any[]
+  articleList: IArticleDetail[]
   location: LocationState
   userId: number
   userInfo: IUserInfo
+  articleDetail: IArticleDetail
 }

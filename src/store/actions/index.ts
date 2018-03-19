@@ -28,6 +28,11 @@ export const addUserInfo = (info: object) => ({
   info
 })
 
+export const addArticleDetail = (info = {}) => ({
+  type: types.ARTICLE_DETAIL,
+  info
+})
+
 export const postLoginThunk = (username: string, password: string) => async (
   dispatch: Dispatch<any>,
   getState: () => IStoreState

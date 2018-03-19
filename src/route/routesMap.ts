@@ -2,7 +2,7 @@ import { redirect } from 'redux-first-router'
 import * as types from '../store/actionTypes/routerTypes'
 // import { Dispatch } from 'react-redux'
 // import { IStoreState } from '../store/types'
-import { thunkArticleList } from './thunk'
+import { thunkArticleList, thunkArticleDetail } from './thunk'
 import { goToPage } from '../store/actions/routerActions'
 
 const routesMap = {
@@ -18,7 +18,7 @@ const routesMap = {
   },
   [types.DETAIL]: {
     path: '/detail/:id',
-    // thunk: thunkArticleList
+    thunk: thunkArticleDetail
   }
 }
 
