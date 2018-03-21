@@ -1,0 +1,22 @@
+.article-content {
+  :global {
+    .ql-indent-1 {
+      padding-left: 3em;
+    }
+    .ql-indent-2 {
+      padding-left: 6em;
+    }
+    .ql-indent-3 {
+      padding-left: 9em;
+    }
+    .ql-align-center {
+      text-align: center;
+    }
+    .ql-align-right {
+      text-align: right;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}

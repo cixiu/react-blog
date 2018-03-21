@@ -171,7 +171,7 @@ class Category extends React.Component<IProps, IState> {
               {!this.injected.isLoading &&
                 articleList.map(article => (
                   <li className={styles.listItem} key={article.id}>
-                    <Link to={`/detail/${article.id}`}>
+                    <Link to={`/detail/${article.id}`} target="__blank">
                       <div className={styles.articel}>
                         {article.screenshot && (
                           <div className={styles.articelScreenshotContainer}>

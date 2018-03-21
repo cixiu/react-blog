@@ -6,10 +6,12 @@ import Router from '../Router/Router'
 import Aside from '../Aside/Aside'
 import * as styles from './index.scss'
 import { changeIsLoading } from '../../store/actions'
+import { IStoreState } from '../../store/types'
 
 // const { Content } = Layout
 interface IProps {}
 interface IReduxInjectedProps extends IProps {
+  page: string
   changeIsLoading: (flag: boolean) => void
 }
 
@@ -37,22 +39,30 @@ class MContent extends React.Component<IProps, {}> {
   render() {
     return (
       <div className={styles.mainContentContainer}>
-        <div className={styles.mainContent}>
-          <nav className={styles.viewNav}>
-            <ul className={styles.navList}>
-              {this.state.tags.map(item => (
-                <NavLink
-                  tagName="li"
-                  key={item.tag}
-                  className={styles.navItem}
-                  to={`/category/${item.tag}`}
-                  activeStyle={{ color: '#1890ff' }}
-                >
-                  {item.text}
-                </NavLink>
-              ))}
-            </ul>
-          </nav>
+        <div
+          className={
+            this.injected.page === 'Category'
+              ? `${styles.mainContent} ${styles.hasViewNav}`
+              : `${styles.mainContent}`
+          }
+        >
+          {this.injected.page === 'Category' && (
+            <nav className={styles.viewNav}>
+              <ul className={styles.navList}>
+                {this.state.tags.map(item => (
+                  <NavLink
+                    tagName="li"
+                    key={item.tag}
+                    className={styles.navItem}
+                    to={`/category/${item.tag}`}
+                    activeStyle={{ color: '#1890ff' }}
+                  >
+                    {item.text}
+                  </NavLink>
+                ))}
+              </ul>
+            </nav>
+          )}
           <main className={styles.main}>
             <Router />
           </main>
@@ -64,6 +74,9 @@ class MContent extends React.Component<IProps, {}> {
   }
 }
 
+const mapStateToProps = ({ page }: IStoreState) => ({
+  page
+})
 const mapDispatchToProps = { changeIsLoading }
 const mergeProps = (
   stateProps: object,
@@ -73,4 +86,6 @@ const mergeProps = (
   return Object.assign({}, ownProps, stateProps, dispatchProps)
 }
 
-export default connect(null, mapDispatchToProps, mergeProps)(MContent)
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(
+  MContent
+)

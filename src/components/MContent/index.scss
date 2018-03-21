@@ -8,6 +8,9 @@
 }
 .main-content {
   position: relative;
+  margin-top: 26px;
+}
+.has-view-nav {
   margin-top: 74px;
 }
 .view-nav {
@@ -70,8 +73,10 @@
   }
   .ant-back-top-content {
     background-color: $color-primary;
+    opacity: 0.3;
   }
   .ant-back-top-content:hover{
-    background-color: #40a9ff;
+    background-color: $color-primary;
+    opacity: 1;
   }
 }
