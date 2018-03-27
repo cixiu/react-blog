@@ -1,0 +1,81 @@
+@import '../../common/scss/variable.scss';
+
+.comments-item {
+  position: relative;
+  display: flex;
+  padding: 10px 24px;
+  border-bottom: 1px solid #f5f5f5;
+}
+.item-comment {
+  flex: 1;
+  margin-left: 10px;
+  overflow: hidden;
+}
+.comment-title {
+  margin-bottom: 5px;
+  time {
+    font-size: 12px;
+    color: #909090;
+  }
+}
+.comment-username {
+  font-weight: 700;
+  margin-right: 8px;
+}
+.comment-floor {
+  float: right;
+  font-size: 12px;
+  color: #909090;
+}
+.comment-content {
+  margin: 5px 0;
+  pre {
+    background-color: #f8f8f8;
+  }
+  code {
+    display: block;
+    padding: 0.5em 1em;
+    margin: 0;
+    overflow-x: auto;
+    word-break: normal;
+    background: #f8f8f8;
+  }
+  img {
+    max-width: 100%;
+  }
+  a {
+    color: $color-primary;
+  }
+}
+.comment-operation {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #909090;
+}
+.comment-like-btn {
+  display: inline-block;
+  height: 30px;
+  margin-right: 1em;
+  padding: 0 12px;
+  font-size: 14px;
+  text-align: center;
+  color: $color-primary;
+  background: rgba(0, 132, 255, 0.1);
+  border-radius: 3px;
+  border-color: transparent;
+  cursor: pointer;
+}
+.comment-like-btn:hover {
+  background-color: rgba(0,132,255,.15);
+}
+.comment-like-btn:focus {
+  outline: none;
+}
+.sub-comment-btn {
+  position: relative;
+  height: 30px;
+  line-height: 30px;
+  color: #909090;
+  cursor: pointer;
+}

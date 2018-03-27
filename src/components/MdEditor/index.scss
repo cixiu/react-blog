@@ -1,0 +1,89 @@
+:global {
+  .CodeMirror-gutter,
+  .CodeMirror-gutters,
+  .CodeMirror-linenumber,
+  .CodeMirror-scroll,
+  .CodeMirror-sizer {
+    box-sizing: content-box !important;
+  }
+  .editor-toolbar.fullscreen {
+    z-index: 200;
+  }
+  .CodeMirror-fullscreen,
+  .editor-preview-side {
+    z-index: 200;
+  }
+  #markdown-editor-wrapper {
+    font-size: 16px;
+    color: #333;
+  }
+  .editor-preview,
+  .editor-preview-side {
+    font-size: 16px;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 700;
+      line-height: 1.5;
+      margin: 20px 0;
+    }
+    p {
+      margin: 1em 0;
+      line-height: 1.7em;
+    }
+    a {
+      color: #1890ff;
+      text-decoration: underline;
+    }
+    ol,
+    ul {
+      padding-left: 2em;
+      li {
+        margin-bottom: 0.5em;
+        list-style: inherit;
+      }
+    }
+    img,
+    video {
+      max-width: 100%;
+      max-height: 667px;
+    }
+    blockquote {
+      margin: 1em 0;
+      border-left: 4px solid #ddd;
+      padding: 0 1em;
+      color: #666;
+      > p {
+        margin: 0.5em 0;
+      }
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+      font-size: 0.8em;
+      padding: 0.2em 0.4em;
+      word-break: break-word;
+      color: #4e5980;
+      background-color: #eee;
+      border-radius: 2px;
+    }
+    pre > code {
+      display: block;
+      padding: 0.5em 1em;
+      margin: 0;
+      overflow-x: auto;
+      font-size: 0.9em;
+      word-break: normal;
+      color: #333;
+      background: #eee;
+    }
+    table {
+      max-width: 100%;
+      overflow: auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+  }
+}

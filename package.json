@@ -39,6 +39,7 @@
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
     "serve-favicon": "^2.4.5",
+    "simplemde": "^1.11.2",
     "webpack-flush-chunks": "^1.2.3"
   },
   "devDependencies": {
@@ -56,6 +57,7 @@
     "@types/react-redux": "^5.0.15",
     "@types/redux-first-router": "^1.10.2",
     "@types/redux-first-router-link": "^1.4.3",
+    "@types/simplemde": "^1.11.7",
     "@types/webpack": "^4.0.0",
     "autodll-webpack-plugin": "^0.3.9",
     "autoprefixer": "^8.1.0",

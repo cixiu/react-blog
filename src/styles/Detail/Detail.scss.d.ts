@@ -1,5 +1,6 @@
 export const articleContent: string;
 export const articleContainer: string;
+export const article: string;
 export const articleAuthorInfo: string;
 export const articleAuthorInfoBox: string;
 export const articleAuthor: string;
@@ -9,3 +10,6 @@ export const articleTitle: string;
 export const equation: string;
 export const hljs: string;
 export const heading: string;
+export const commentsContainer: string;
+export const commentsBar: string;
+export const commentsForm: string;

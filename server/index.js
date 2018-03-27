@@ -13,6 +13,7 @@ const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
 const clientConfig = require('../build/webpack.client.dev')
 const serverConfig = require('../build/webpack.server.dev')
 const proxyUser = require('./proxy')
+const axios = require('axios')
 
 // const apiServerHost = 'http://127.0.0.1:3001'
 // process.env.BASE_URL = apiServerHost
@@ -22,16 +23,18 @@ const outputPath = clientConfig.output.path
 const app = express()
 
 app.use(favicon(path.join(__dirname, '../favicon.ico')))
-
-app.use(bodyParser.json())
 app.use(cookieParser('this is a blog writed by cixiu'))
 
-// 代理登录接口 存储session 保持登录状态
-app.use('/api/user', proxyUser)
-
 app.use('/api', proxy({
-  target: 'http://localhost:3001'
+  target: 'http://localhost:3001',
+  logLevel: 'debug'
 }))
+
+// 因为http-proxy-middleware代理请求post请求时是不需要app.use(bodyParser.json())的
+// 因此app.use(bodyParser.json())要在http-proxy-middleware之后使用 否则在post请求时会导致请求发送不出
+app.use(bodyParser.json())
+// 代理登录接口 存储cookie 保持登录状态
+app.use('/user', proxyUser)
 
 if (DEV) {
   const multiCompiler = webpack([clientConfig, serverConfig])

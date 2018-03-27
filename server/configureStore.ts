@@ -39,7 +39,7 @@ export default async (req: Request, res: Response) => {
   // 将存在cookie中的userId取出用来获取用户信息
   const state = store.getState()
   await Promise.all([
-    store.dispatch(getUserInfoThunk(state.userId)),
+    state.userId && store.dispatch(getUserInfoThunk(state.userId)),
     thunk(store)
   ])
 
