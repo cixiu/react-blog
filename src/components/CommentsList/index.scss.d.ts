@@ -6,4 +6,6 @@ export const commentFloor: string;
 export const commentContent: string;
 export const commentOperation: string;
 export const commentLikeBtn: string;
+export const isLiked: string;
 export const subCommentBtn: string;
+export const subCommentArrow: string;

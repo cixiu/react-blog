@@ -53,6 +53,7 @@ class MHeader extends React.Component<IProps, {}> {
       if (res.code === 0) {
         message.success(res.message)
         this.setState({ visible: false })
+        window.location.reload()
       } else {
         message.info(res.message)
         this.setState({ loading: false })

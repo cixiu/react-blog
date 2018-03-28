@@ -2,25 +2,38 @@ import axios from 'axios'
 const baseUrl = process.env.BASE_URL || ''
 
 interface ICreateCommentParams {
-  articleId: number
   userId: number
   content: string
 }
 
-export const createComment = async (data: ICreateCommentParams) => {
+interface ILikeCommentParams {
+  commentId: number
+  userId: number
+}
+
+export const createComment = async (articleId: number, data: ICreateCommentParams) => {
   try {
-    const res = await axios.post(`${baseUrl}/api/comments/create`, data)
+    const res = await axios.post(`${baseUrl}/api/comments/${articleId}/create`, data)
     return Promise.resolve(res.data)
   } catch (err) {
     console.log(err)
   }
 }
 
-export const getArticleComments = async (articleId: number) => {
+export const getArticleComments = async (articleId: number, userId: number) => {
   try {
-    const res = await axios.get(`${baseUrl}/api/comments/list`, {
-      params: { articleId }
+    const res = await axios.get(`${baseUrl}/api/comments/${articleId}/list`, {
+      params: { userId }
     })
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const likeComment = async (articleId: number, data: ILikeCommentParams) => {
+  try {
+    const res = await axios.post(`${baseUrl}/api/comments/${articleId}/like`, data)
     return Promise.resolve(res.data)
   } catch (err) {
     console.log(err)

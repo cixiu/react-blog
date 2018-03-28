@@ -16,7 +16,6 @@ import * as styles from '../../styles/Detail/Detail.scss'
 interface IState {
   showComments: boolean
   comments: any[]
-  totalCount: number
   comment: string
 }
 
@@ -25,31 +24,41 @@ interface IReduxInjectedProps extends IProps {
   articleDetail: IStoreState['articleDetail']
   isLoading: boolean
   userId: number
+  userInfo: IStoreState['userInfo']
 }
 class Detail extends React.Component<IProps, IState> {
-  state = {
+  state: IState = {
     showComments: false,
-    comments: [] as any[],
-    totalCount: 0,
+    comments: [],
     comment: ''
   }
+  get injected() {
+    return this.props as IReduxInjectedProps
+  }
+
   async componentDidMount() {
-    const res = await getArticleComments(this.injected.articleDetail.id)
+    const { articleDetail, userId } = this.injected
+    const res = await getArticleComments(articleDetail.id, userId)
     if (res.code === 0 && res.data.count) {
       this.setState({
         comments: res.data.comments,
-        totalCount: res.data.count,
         showComments: true
       })
     }
   }
 
-  get injected() {
-    return this.props as IReduxInjectedProps
-  }
-
   changeValue = (simplemde: SimpleMDE) => {
     this.setState({ comment: simplemde.value() })
+  }
+
+  supportComment = (item: any) => {
+    const comments = this.state.comments
+    for (let comment of comments) {
+      if (comment.id === item.id) {
+        comment = item
+      }
+    }
+    this.setState({ comments })
   }
 
   submitComment = async () => {
@@ -60,12 +69,13 @@ class Detail extends React.Component<IProps, IState> {
     const articleId = this.injected.articleDetail.id
     const userId = this.injected.userId
     const content = marked(this.state.comment)
-    const res = await createComment({ articleId, userId, content })
+    const res = await createComment(articleId, { userId, content })
     if (res.code === 0) {
       this.setState(prevState => {
         return {
           comments: prevState.comments.concat(res.data),
-          comment: ''
+          comment: '',
+          showComments: true
         }
       })
       message.success('评论成功')
@@ -80,9 +90,10 @@ class Detail extends React.Component<IProps, IState> {
       screenshot,
       author,
       create_time,
-      title
+      title,
+      id
     } = this.injected.articleDetail
-    const { totalCount, comments } = this.state
+    const { comments } = this.state
     let html = ''
     if (content) {
       html = content
@@ -134,10 +145,15 @@ class Detail extends React.Component<IProps, IState> {
         {this.state.showComments && (
           <div className={styles.commentsContainer}>
             <div className={styles.commentsBar}>
-              <span>{totalCount}回复</span>
-              <span>{comments[totalCount - 1].updateAt}</span>
+              <span>{comments.length} 回复</span>
+              <span>{comments[comments.length - 1].updateAt}</span>
             </div>
-            <CommentsList comments={comments}/>
+            <CommentsList
+              comments={comments}
+              articleId={id}
+              userInfo={this.injected.userInfo}
+              supportComment={this.supportComment}
+            />
           </div>
         )}
         <div className={styles.commentsContainer}>
@@ -172,11 +188,13 @@ class Detail extends React.Component<IProps, IState> {
 const mapStateToProps = ({
   articleDetail,
   isLoading,
-  userId
+  userId,
+  userInfo
 }: IStoreState) => ({
   articleDetail,
   isLoading,
-  userId
+  userId,
+  userInfo
 })
 
 const mergeProps = (
