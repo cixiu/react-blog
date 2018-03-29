@@ -11,15 +11,31 @@ interface ILikeCommentParams {
   userId: number
 }
 
-export const createComment = async (articleId: number, data: ICreateCommentParams) => {
+interface IReplyCommentParams {
+  articleId: number
+  userId: number
+  respUserId: number
+  commentId: number
+  content: string
+}
+
+// 发表评论
+export const createComment = async (
+  articleId: number,
+  data: ICreateCommentParams
+) => {
   try {
-    const res = await axios.post(`${baseUrl}/api/comments/${articleId}/create`, data)
+    const res = await axios.post(
+      `${baseUrl}/api/comments/${articleId}/create`,
+      data
+    )
     return Promise.resolve(res.data)
   } catch (err) {
     console.log(err)
   }
 }
 
+// 获取文章的评论列表
 export const getArticleComments = async (articleId: number, userId: number) => {
   try {
     const res = await axios.get(`${baseUrl}/api/comments/${articleId}/list`, {
@@ -31,9 +47,30 @@ export const getArticleComments = async (articleId: number, userId: number) => {
   }
 }
 
-export const likeComment = async (articleId: number, data: ILikeCommentParams) => {
+// 对评论点赞
+export const likeComment = async (
+  articleId: number,
+  data: ILikeCommentParams
+) => {
   try {
-    const res = await axios.post(`${baseUrl}/api/comments/${articleId}/like`, data)
+    const res = await axios.post(
+      `${baseUrl}/api/comments/${articleId}/like`,
+      data
+    )
+    return Promise.resolve(res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// 回复评论
+export const replyComment = async (data: IReplyCommentParams) => {
+  const { articleId, userId, respUserId, commentId, content } = data
+  try {
+    const res = await axios.post(
+      `${baseUrl}/api/comments/${articleId}/${commentId}/${userId}/reply/${respUserId}`,
+      { content }
+    )
     return Promise.resolve(res.data)
   } catch (err) {
     console.log(err)

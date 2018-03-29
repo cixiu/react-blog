@@ -11,7 +11,7 @@ interface IProps {
   value: string
   extraKeys?: string
   className?: string
-  id?: string
+  id: string
   style?: React.CSSProperties
 }
 
@@ -48,7 +48,7 @@ class MdEditor extends React.Component<IProps, {}> {
     // 服务端渲染中需要在componentDidMount的时候引入simplemde库 不然会报错
     const SimpleMDE = require('simplemde')
     const initialOptions = {
-      element: document.getElementById('markdown-editor') as HTMLElement,
+      element: document.getElementById(this.props.id) as HTMLElement,
       initialValue: this.props.value,
       renderingConfig: config.renderingConfig,
       toolbar: config.toolbar
@@ -66,7 +66,7 @@ class MdEditor extends React.Component<IProps, {}> {
   }
 
   addEvents = () => {
-    const wrapperEl = document.getElementById('markdown-editor-wrapper') as HTMLElement
+    const wrapperEl = document.getElementById(`${this.props.id}-wrapper`) as HTMLElement
 
     this.editorEl = wrapperEl.getElementsByClassName('CodeMirror')[0]
     this.editorToolbarEl = wrapperEl.getElementsByClassName('editor-toolbar')[0]
@@ -93,8 +93,8 @@ class MdEditor extends React.Component<IProps, {}> {
 
   render() {
     return (
-      <div id="markdown-editor-wrapper" className={this.props.className}>
-        <textarea id="markdown-editor" />
+      <div id={`${this.props.id}-wrapper`} className="markdown-editor-wrapper">
+        <textarea id={this.props.id} className="markdown-editor" />
         <input
           className="image-file-selector"
           type="file"
@@ -110,21 +110,3 @@ class MdEditor extends React.Component<IProps, {}> {
 }
 
 export default MdEditor
-/*
-Editor.propTypes = {
-  onChange: PropTypes.func,
-  options: PropTypes.object,
-  value: PropTypes.string,
-  extraKeys: PropTypes.string,
-  className: PropTypes.string,
-  id: PropTypes.string
-}
-
-Editor.defaultProps = {
-  onChange: NOOP,
-  options: {},
-  value: '',
-  extraKeys: '',
-  className: '',
-  id: ''
-} */

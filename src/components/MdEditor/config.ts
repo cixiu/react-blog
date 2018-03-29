@@ -154,4 +154,11 @@ const config = {
   ]
 }
 
+let id = 0
+
+export const generateId = () => {
+  id += 1
+  return `markdown-editor-${id}`
+}
+
 export default config

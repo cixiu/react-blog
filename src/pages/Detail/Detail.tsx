@@ -17,6 +17,7 @@ interface IState {
   showComments: boolean
   comments: any[]
   comment: string
+  count: number
 }
 
 interface IProps {}
@@ -30,7 +31,8 @@ class Detail extends React.Component<IProps, IState> {
   state: IState = {
     showComments: false,
     comments: [],
-    comment: ''
+    comment: '',
+    count: 0
   }
   get injected() {
     return this.props as IReduxInjectedProps
@@ -42,7 +44,8 @@ class Detail extends React.Component<IProps, IState> {
     if (res.code === 0 && res.data.count) {
       this.setState({
         comments: res.data.comments,
-        showComments: true
+        showComments: true,
+        count: res.data.count
       })
     }
   }
@@ -75,7 +78,8 @@ class Detail extends React.Component<IProps, IState> {
         return {
           comments: prevState.comments.concat(res.data),
           comment: '',
-          showComments: true
+          showComments: true,
+          count: prevState.count + 1
         }
       })
       message.success('评论成功')
@@ -93,7 +97,7 @@ class Detail extends React.Component<IProps, IState> {
       title,
       id
     } = this.injected.articleDetail
-    const { comments } = this.state
+    const { comments, count } = this.state
     let html = ''
     if (content) {
       html = content
@@ -145,7 +149,7 @@ class Detail extends React.Component<IProps, IState> {
         {this.state.showComments && (
           <div className={styles.commentsContainer}>
             <div className={styles.commentsBar}>
-              <span>{comments.length} 回复</span>
+              <span>{count} 回复</span>
               <span>{comments[comments.length - 1].updateAt}</span>
             </div>
             <CommentsList
@@ -160,6 +164,7 @@ class Detail extends React.Component<IProps, IState> {
           <div className={styles.commentsBar}>添加评论</div>
           <div className={styles.commentsForm}>
             <MdEditor
+              id="markdown-editor-comment"
               value={this.state.comment}
               onChange={this.changeValue}
               options={{
