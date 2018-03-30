@@ -17,6 +17,7 @@ interface IReplyCommentParams {
   respUserId: number
   commentId: number
   content: string
+  isReply?: boolean
 }
 
 // 发表评论
@@ -65,11 +66,11 @@ export const likeComment = async (
 
 // 回复评论
 export const replyComment = async (data: IReplyCommentParams) => {
-  const { articleId, userId, respUserId, commentId, content } = data
+  const { articleId, userId, respUserId, commentId, content, isReply = false } = data
   try {
     const res = await axios.post(
       `${baseUrl}/api/comments/${articleId}/${commentId}/${userId}/reply/${respUserId}`,
-      { content }
+      { content, isReply }
     )
     return Promise.resolve(res.data)
   } catch (err) {

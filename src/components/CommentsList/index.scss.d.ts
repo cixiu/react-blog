@@ -1,4 +1,5 @@
 export const commentsItem: string;
+export const itemAvatar: string;
 export const itemComment: string;
 export const commentTitle: string;
 export const commentUsername: string;
@@ -13,6 +14,7 @@ export const subCommentBox: string;
 export const subCommentBoxInner: string;
 export const emptyComment: string;
 export const subCommentList: string;
+export const item: string;
 export const subCommentItem: string;
 export const subCommentUsername: string;
 export const subCommentOperation: string;

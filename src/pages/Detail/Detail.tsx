@@ -54,12 +54,11 @@ class Detail extends React.Component<IProps, IState> {
     this.setState({ comment: simplemde.value() })
   }
 
-  supportComment = (item: any) => {
-    const comments = this.state.comments
-    for (let comment of comments) {
-      if (comment.id === item.id) {
-        comment = item
-      }
+  supportComment = (comments: any[], needChangeCount = false) => {
+    if (needChangeCount) {
+      this.setState(prevState => ({
+        count: prevState.count + 1
+      }))
     }
     this.setState({ comments })
   }
@@ -176,13 +175,14 @@ class Detail extends React.Component<IProps, IState> {
                 showIcons: ['code', 'table']
               }}
             />
-            <Button
-              type="primary"
-              style={{ marginTop: '10px' }}
-              onClick={this.submitComment}
-            >
-              评论
-            </Button>
+            <div style={{ marginTop: '10px', textAlign: 'right' }}>
+              <Button
+                type="primary"
+                onClick={this.submitComment}
+              >
+                评论
+              </Button>
+            </div>
           </div>
         </div>
       </React.Fragment>
