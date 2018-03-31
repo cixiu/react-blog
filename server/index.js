@@ -27,7 +27,7 @@ app.use(cookieParser('this is a blog writed by cixiu'))
 
 app.use('/api', proxy({
   target: 'http://localhost:3001',
-  logLevel: 'debug'
+  // logLevel: 'debug'
 }))
 
 // 因为http-proxy-middleware代理请求post请求时是不需要app.use(bodyParser.json())的

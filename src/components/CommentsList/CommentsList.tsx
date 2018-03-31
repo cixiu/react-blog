@@ -389,7 +389,7 @@ class CommentsList extends React.Component<IProps, IState> {
                           showIcons: ['code', 'table']
                         }}
                       />
-                      <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                      <div style={{ marginTop: '10px' }}>
                         <Button
                           type="primary"
                           onClick={() => this.submitSubComment(item, index)}

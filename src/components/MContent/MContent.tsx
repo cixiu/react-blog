@@ -7,8 +7,6 @@ import Aside from '../Aside/Aside'
 import * as styles from './index.scss'
 import { changeIsLoading } from '../../store/actions'
 import { IStoreState } from '../../store/types'
-
-// const { Content } = Layout
 interface IProps {}
 interface IReduxInjectedProps extends IProps {
   page: string
