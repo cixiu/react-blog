@@ -16,7 +16,7 @@ router.post('/login', async (req, res, next) => {
     if (response.data.code === 0) {
       const userId = response.data.data.id
       res.cookie('userId', userId, {
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         signed: true
       })
       req.cookies.userId = userId

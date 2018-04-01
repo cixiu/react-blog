@@ -50,11 +50,10 @@ class MdEditor extends React.Component<IProps, {}> {
     const initialOptions = {
       element: document.getElementById(this.props.id) as HTMLElement,
       initialValue: this.props.value,
-      renderingConfig: config.renderingConfig,
-      toolbar: config.toolbar
+      ...config
     }
     const { options } = this.props
-    const allOptions = { ...initialOptions, ...options}
+    const allOptions = { ...initialOptions, ...options }
     this.simplemde = new SimpleMDE(allOptions)
   }
 
@@ -66,12 +65,16 @@ class MdEditor extends React.Component<IProps, {}> {
   }
 
   addEvents = () => {
-    const wrapperEl = document.getElementById(`${this.props.id}-wrapper`) as HTMLElement
+    const wrapperEl = document.getElementById(
+      `${this.props.id}-wrapper`
+    ) as HTMLElement
 
     this.editorEl = wrapperEl.getElementsByClassName('CodeMirror')[0]
     this.editorToolbarEl = wrapperEl.getElementsByClassName('editor-toolbar')[0]
 
     this.editorEl.addEventListener('keyup', this.eventWrapper)
+    // 需要监听剪贴板paste粘贴事件 有兼容性问题
+    this.editorEl.addEventListener('paste', this.eventWrapper)
     if (this.editorToolbarEl) {
       this.editorToolbarEl.addEventListener('click', this.eventWrapper)
     }
@@ -86,6 +89,7 @@ class MdEditor extends React.Component<IProps, {}> {
 
   removeEvents = () => {
     this.editorEl.removeEventListener('keyup', this.eventWrapper)
+    this.editorEl.removeEventListener('paste', this.eventWrapper)
     if (this.editorToolbarEl) {
       this.editorToolbarEl.removeEventListener('click', this.eventWrapper)
     }
@@ -95,12 +99,12 @@ class MdEditor extends React.Component<IProps, {}> {
     return (
       <div id={`${this.props.id}-wrapper`} className="markdown-editor-wrapper">
         <textarea id={this.props.id} className="markdown-editor" />
-        <input
+        {/* <input
           className="image-file-selector"
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
-        />
+        /> */}
         {this.state.isLoading && (
           <div style={{ fontSize: '100px' }}>isLoading</div>
         )}

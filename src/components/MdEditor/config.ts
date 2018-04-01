@@ -10,6 +10,7 @@ interface IOptions extends SimpleMDE.Options {
 
 interface ISimpleMDE extends SimpleMDE {
   options: IOptions
+  element: HTMLTextAreaElement
   markdown(text: string): void
   render(el: HTMLElement): void
   autosave(): void
@@ -83,12 +84,13 @@ function _replaceSelection(
   cm.focus()
 }
 
-let isListener = false
-
 const config = {
   renderingConfig: {
     singleLineBreaks: false,
     codeSyntaxHighlighting: true
+  },
+  insertTexts: {
+    image: ["![", "](#url#)"]
   },
   toolbar: [
     'bold',
@@ -104,15 +106,20 @@ const config = {
     {
       name: 'image',
       action: (editor: ISimpleMDE) => {
-        const fileInput = document.querySelector(
+        const parentElement = editor.element.parentElement as HTMLElement
+        let fileInput = parentElement.querySelector(
           '.image-file-selector'
         ) as HTMLInputElement
-        if (!isListener) {
-          isListener = true
+        if (!fileInput) {
+          fileInput = document.createElement('input')
+          fileInput.setAttribute('type', 'file')
+          fileInput.setAttribute('accept', 'image/*')
+          fileInput.style.display = 'none'
+          fileInput.classList.add('image-file-selector')
           fileInput.addEventListener('change', async () => {
-            const formData = new FormData()
             if (fileInput.files && fileInput.files[0]) {
-              console.log(fileInput.files)
+              const formData = new FormData()
+              // console.log(fileInput.files)
               formData.append('image', fileInput.files[0])
               const res = await axios.post('/api/admin/upload', formData)
               const cm = editor.codemirror
@@ -135,9 +142,14 @@ const config = {
                   )
                 }
               }
+              // 将图片url插入编辑区域后并不会触发编辑区域的value的Change, 所以需要手动触发
+              // 主动点击editor-toolbar触发value的onChange
+              const toolbarElement = parentElement.querySelector('.editor-toolbar') as HTMLElement
+              toolbarElement.click()
             }
             return
           })
+          parentElement.appendChild(fileInput)
         }
         fileInput.click()
       },
