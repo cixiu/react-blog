@@ -1,4 +1,5 @@
 import * as SimpleMDE from 'simplemde'
+import { message } from 'antd'
 import axios from 'axios'
 
 interface IOptions extends SimpleMDE.Options {
@@ -90,7 +91,7 @@ const config = {
     codeSyntaxHighlighting: true
   },
   insertTexts: {
-    image: ["![", "](#url#)"]
+    image: ['![', '](#url#)']
   },
   toolbar: [
     'bold',
@@ -110,6 +111,11 @@ const config = {
         let fileInput = parentElement.querySelector(
           '.image-file-selector'
         ) as HTMLInputElement
+        if (fileInput) {
+          // 当fileInput存在时，每次重置fileInput的value值
+          // 解决2次上传同一文件，因fileInput的value值相同而不会触发fileInput的change事件的问题
+          fileInput.value = ''
+        }
         if (!fileInput) {
           fileInput = document.createElement('input')
           fileInput.setAttribute('type', 'file')
@@ -121,11 +127,19 @@ const config = {
               const formData = new FormData()
               // console.log(fileInput.files)
               formData.append('image', fileInput.files[0])
-              const res = await axios.post('/api/admin/upload', formData)
+              const hide = message.loading('图片正在上传···', 0)
+              const response = await axios.post('/api/admin/upload', formData)
+              const res = response.data
+              // 图片上传失败的反馈
+              if (res.code === 1) {
+                message.error(res.message)
+              }
+              // 无论最后上传是否成功 都要将提示信息隐藏
+              hide()
               const cm = editor.codemirror
               const stat = editor.getState()
               const options = editor.options
-              let url = res.data.image.url
+              let url = res.image.url
               if (options.promptURLs) {
                 url = options.promptTexts && prompt(options.promptTexts.image)
                 if (!url) {
@@ -144,7 +158,9 @@ const config = {
               }
               // 将图片url插入编辑区域后并不会触发编辑区域的value的Change, 所以需要手动触发
               // 主动点击editor-toolbar触发value的onChange
-              const toolbarElement = parentElement.querySelector('.editor-toolbar') as HTMLElement
+              const toolbarElement = parentElement.querySelector(
+                '.editor-toolbar'
+              ) as HTMLElement
               toolbarElement.click()
             }
             return
