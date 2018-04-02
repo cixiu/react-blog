@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "npm run clean && cross-env NODE_ENV=development nodemon -w server server/index.js",
-    "start:prod": "npm run build && npm run serve",
+    "dev": "npm start",
+    "start:prod": "npm run build && npm run server",
     "server": "node server.prod.js",
     "build": "node build/build.js",
     "clean": "rimraf dist"

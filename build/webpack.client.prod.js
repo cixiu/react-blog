@@ -6,7 +6,7 @@ const StatsPlugin = require('stats-webpack-plugin')
 const AutoDllPlugin = require('autodll-webpack-plugin')
 const autoprefixer = require('autoprefixer')
 
-const resolve = (dir) => {
+const resolve = dir => {
   return path.join(__dirname, '..', dir)
 }
 
@@ -14,10 +14,9 @@ module.exports = {
   name: 'client',
   target: 'web',
   devtool: 'source-map',
-  entry: [
-    'babel-polyfill',
-    path.resolve(__dirname, '../src/index.tsx')
-  ],
+  entry: {
+    app: ['babel-polyfill', path.resolve(__dirname, '../src/index.tsx')]
+  },
   output: {
     filename: '[name].[chunkhash:8].js',
     chunkFilename: 'js/[name].[chunkhash:8].js',
@@ -46,10 +45,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrc: true,
-              plugins: [
-                'react-hot-loader/babel',
-                "syntax-dynamic-import"
-              ]
+              plugins: ['react-hot-loader/babel', 'syntax-dynamic-import']
             }
           },
           {
@@ -75,7 +71,7 @@ module.exports = {
         include: /node_modules/,
         use: ExtractCssChunks.extract({
           use: {
-            loader: 'css-loader'
+            loader: 'css-loader?minimize=true'
           }
         })
       },
@@ -166,11 +162,20 @@ module.exports = {
           'react-dom',
           'react-redux',
           'redux',
+          'redux-thunk',
           'history/createBrowserHistory',
           'redux-first-router',
           'redux-first-router-link',
           'babel-polyfill',
-          'redux-devtools-extension/developmentOnly'
+          'redux-devtools-extension/developmentOnly',
+          'classnames',
+          'dateformat',
+          'marked',
+          'query-string',
+          'react-content-loader',
+          'react-helmet',
+          'react-infinite-scroller',
+          'simplemde'
         ]
       },
       plugins: [

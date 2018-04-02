@@ -30,7 +30,6 @@ module.exports = {
   // devtool: 'source-map',
   devtool: 'eval-source-map',
   entry: [
-    'babel-polyfill',
     resolve('../server/render.tsx')
   ],
   output: {

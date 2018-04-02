@@ -9,7 +9,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const notifier = require('node-notifier')
 const autoprefixer = require('autoprefixer')
 
-const resolve = (dir) => {
+const resolve = dir => {
   return path.join(__dirname, '..', dir)
 }
 
@@ -18,11 +18,13 @@ module.exports = {
   target: 'web',
   // devtool: 'source-map',
   devtool: 'eval-source-map',
-  entry: [
-    'babel-polyfill',
-    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=false&quiet=true&noInfo=true',
-    path.resolve(__dirname, '../src/index.tsx')
-  ],
+  entry: {
+    app: [
+      'babel-polyfill',
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=false&quiet=true&noInfo=true',
+      path.resolve(__dirname, '../src/index.tsx')
+    ]
+  },
   output: {
     filename: '[name].js',
     chunkFilename: 'js/[name].js',
@@ -51,10 +53,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrc: true,
-              plugins: [
-                'react-hot-loader/babel',
-                "syntax-dynamic-import"
-              ]
+              plugins: ['react-hot-loader/babel', 'syntax-dynamic-import']
             }
           },
           {
@@ -137,9 +136,7 @@ module.exports = {
     new ExtractCssChunks({
       filename: 'css/[name].css'
     }),
-    new webpack.WatchIgnorePlugin([
-      /scss\.d\.ts$/
-    ]),
+    new webpack.WatchIgnorePlugin([/scss\.d\.ts$/]),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['bootstrap'], // needed to put webpack bootstrap code before chunks
       filename: '[name].js',
@@ -185,11 +182,20 @@ module.exports = {
           'react-dom',
           'react-redux',
           'redux',
+          'redux-thunk',
           'history/createBrowserHistory',
           'redux-first-router',
           'redux-first-router-link',
           'babel-polyfill',
-          'redux-devtools-extension/developmentOnly'
+          'redux-devtools-extension/developmentOnly',
+          'classnames',
+          'dateformat',
+          'marked',
+          'query-string',
+          'react-content-loader',
+          'react-helmet',
+          'react-infinite-scroller',
+          'simplemde'
         ]
       }
     })

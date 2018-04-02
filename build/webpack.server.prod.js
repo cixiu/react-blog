@@ -96,8 +96,8 @@ module.exports = {
           loader: 'css-loader/locals',
           options: {
             modules: true,
-            localIdentName: '[name]-[local]-[hash:base64:5]',   // localIdentName格式必须与客户端的css-loader设置一样
-            cameCase: true
+            localIdentName: '[name]__[local]--[hash:base64:5]',   // localIdentName格式必须与客户端的css-loader设置一样
+            camelCase: true
           }
         }
       },
@@ -118,7 +118,8 @@ module.exports = {
 
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
+        NODE_ENV: JSON.stringify('production'),
+        BASE_URL: JSON.stringify('http://127.0.0.1:3001')
       }
     })
   ]

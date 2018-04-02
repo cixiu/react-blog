@@ -1,6 +1,5 @@
 require('babel-polyfill')
 const express = require('express')
-const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const favicon = require('serve-favicon')
@@ -13,7 +12,6 @@ const webpackHotServerMiddleware = require('webpack-hot-server-middleware')
 const clientConfig = require('../build/webpack.client.dev')
 const serverConfig = require('../build/webpack.server.dev')
 const proxyUser = require('./proxy')
-const axios = require('axios')
 
 // const apiServerHost = 'http://127.0.0.1:3001'
 // process.env.BASE_URL = apiServerHost
@@ -26,7 +24,7 @@ app.use(favicon(path.join(__dirname, '../favicon.ico')))
 app.use(cookieParser('this is a blog writed by cixiu'))
 
 app.use('/api', proxy({
-  target: 'http://localhost:3001',
+  target: 'http://127.0.0.1:3001',
   // logLevel: 'debug'
 }))
 

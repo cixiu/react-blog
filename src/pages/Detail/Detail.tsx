@@ -94,7 +94,8 @@ class Detail extends React.Component<IProps, IState> {
       author,
       create_time,
       title,
-      id
+      id,
+      description
     } = this.injected.articleDetail
     const { comments, count } = this.state
     let html = ''
@@ -108,7 +109,8 @@ class Detail extends React.Component<IProps, IState> {
       <React.Fragment>
         <div className={styles.articleContainer}>
           <Helmet>
-            <title>{title}</title>
+            <title>{title} - 辞修</title>
+            <meta name="description" content={description} />
           </Helmet>
           <article className={styles.article}>
             <div className={styles.articleAuthorInfo}>
@@ -176,10 +178,7 @@ class Detail extends React.Component<IProps, IState> {
               }}
             />
             <div style={{ marginTop: '10px' }}>
-              <Button
-                type="primary"
-                onClick={this.submitComment}
-              >
+              <Button type="primary" onClick={this.submitComment}>
                 评论
               </Button>
             </div>

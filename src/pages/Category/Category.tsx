@@ -135,7 +135,7 @@ class Category extends React.Component<IProps, IState> {
     return (
       <div className={styles.category}>
         <Helmet>
-          <title>{payload.category}</title>
+          <title>{payload.category} - 辞修</title>
         </Helmet>
         <header className={styles.listHeader}>
           <ul className={styles.navList}>
