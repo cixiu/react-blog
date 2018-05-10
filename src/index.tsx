@@ -10,7 +10,6 @@ import './common/scss/rest.scss'
 import './Interceptors'
 
 interface IWindow extends Window {
-  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any
   REDUX_STATE: IStoreState
 }
 declare const window: IWindow

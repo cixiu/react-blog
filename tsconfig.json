@@ -21,6 +21,7 @@
     // 禁止对同一个文件的不一致的引用
     "forceConsistentCasingInFileNames": true,
     // 不是函数的所有返回路径都有返回值时报错。
+    // "strict": true,
     "noImplicitReturns": true,
     // 当 this表达式的值为 any类型的时候，生成一个错误
     "noImplicitThis": true,
