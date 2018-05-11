@@ -38,6 +38,7 @@ class CommentsList extends React.Component<IProps, IState> {
     this.initialState(this.props.comments)
   }
 
+  // FIXME:迁移到getDerivedStateFromProps生命周期中
   componentWillReceiveProps(nextProps: IProps) {
     // 如果发布评论后要更新props上的comments列表
     if (this.props.comments.length !== nextProps.comments.length) {

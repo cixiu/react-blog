@@ -16,6 +16,11 @@ interface IProps {
 }
 
 class MdEditor extends React.Component<IProps, {}> {
+  // static getDerivedStateFromProps(nextProps: any, prevState: any) {
+  //   return {
+  //     name: 'ni'
+  //   }
+  // }
   simplemde: SimpleMDE
   editorEl: Element
   editorToolbarEl: Element | null
@@ -30,6 +35,7 @@ class MdEditor extends React.Component<IProps, {}> {
     this.addExtraKeys()
   }
 
+  // FIXME:迁移到getDerivedStateFromProps生命周期中
   componentWillReceiveProps(nextProps: IProps) {
     if (!this.state.keyChange && nextProps.value !== this.simplemde.value()) {
       this.simplemde.value(nextProps.value)

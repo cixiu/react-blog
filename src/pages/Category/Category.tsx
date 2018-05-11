@@ -40,9 +40,32 @@ interface IState {
   limit: number
   current: number
   flag: boolean
+  pathname: string
+  isLoading: boolean
 }
 
 class Category extends React.Component<IProps, IState> {
+  static getDerivedStateFromProps(
+    nextProps: IReduxInjectedProps,
+    prevState: IState
+  ) {
+    if (
+      nextProps.location.pathname !== prevState.pathname ||
+      nextProps.isLoading !== prevState.isLoading
+    ) {
+      console.log(
+        nextProps.location.pathname !== prevState.pathname,
+        nextProps.isLoading !== prevState.isLoading
+      )
+      return {
+        pathname: nextProps.location.pathname,
+        isLoading: nextProps.isLoading,
+        current: 0,
+        flag: true
+      }
+    }
+    return null
+  }
   state = {
     navList: [
       { sort: 'recently', text: '最近更新' },
@@ -50,25 +73,27 @@ class Category extends React.Component<IProps, IState> {
     ],
     limit: 10,
     loading: false, // 用于控制加载更多的Loading
-    current: 0,
-    flag: false // 用于控制切换标签的再次数据请求，在thunk中已经请求了 在loadMore中不需要初次在请求
+    current: 0, // 用于控制当前要显示的页数
+    flag: false, // 用于控制切换标签的再次数据请求，在thunk中已经请求了 在loadMore中不需要初次在请求
+    pathname: this.injected.location.pathname,
+    isLoading: this.injected.isLoading
   }
 
   get injected() {
     return this.props as IReduxInjectedProps
   }
 
-  componentWillReceiveProps(nextProps: IReduxInjectedProps) {
-    if (
-      this.injected.location.pathname !== nextProps.location.pathname ||
-      this.injected.isLoading !== nextProps.isLoading
-    ) {
-      this.setState({
-        current: 0,
-        flag: true
-      })
-    }
-  }
+  // componentWillReceiveProps(nextProps: IReduxInjectedProps) {
+  //   if (
+  //     this.injected.location.pathname !== nextProps.location.pathname ||
+  //     this.injected.isLoading !== nextProps.isLoading
+  //   ) {
+  //     this.setState({
+  //       current: 0,
+  //       flag: true
+  //     })
+  //   }
+  // }
 
   isActive = (match: Match<{}>, location: Location, sort = 'recently') => {
     const query: { sort: string } = location.query as any
@@ -225,9 +250,10 @@ class Category extends React.Component<IProps, IState> {
               !this.injected.isLoading && <SkeletonLoading />}
           </InfiniteScroll>
         )}
-        {(articleList.length === 0 && !this.injected.isLoading) && (
-          <div className={styles.noData}>这个分类暂时还没有文章</div>
-        )}
+        {articleList.length === 0 &&
+          !this.injected.isLoading && (
+            <div className={styles.noData}>这个分类暂时还没有文章</div>
+          )}
       </div>
     )
   }
