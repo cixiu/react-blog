@@ -18,46 +18,72 @@ interface IProps {
 }
 interface IState {
   subCommentSwitches: boolean[]
-  subMdeValues: any[]
-  comment: string
+  subMdeValues: Array<{
+    isReply: boolean
+    index: number
+    comment: string
+  }>
   currentSubIndex: number
   currentCommentIndex: number
+  mirrorCommentsLength: number
 }
 
 class CommentsList extends React.Component<IProps, IState> {
   commentArrowGroup: any[] = [] as HTMLDivElement[]
   titleGroup: any[] = [] as HTMLSpanElement[]
+  mdRef: Array<MdEditor | any> = []
+
   state: IState = {
-    subCommentSwitches: [], // 用于控制子评论的显示开关集合
-    subMdeValues: [], // 用于控制子评论的编辑器的value值的集合
-    comment: '',
+    // 初始化控制子评论的显示开关集合
+    subCommentSwitches: [],
+    // 初始化控制子评论的编辑器的value值的集合
+    subMdeValues: [],
     currentCommentIndex: -1,
-    currentSubIndex: -1
+    currentSubIndex: -1,
+    mirrorCommentsLength: this.props.comments.length
   }
+
+  static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
+    if (nextProps.comments.length !== prevState.mirrorCommentsLength) {
+      prevState.subCommentSwitches.push(false)
+      prevState.subMdeValues.push({
+        isReply: false,
+        index: -1,
+        comment: ''
+      })
+      return {
+        mirrorCommentsLength: nextProps.comments.length,
+        subCommentSwitches: prevState.subCommentSwitches,
+        subMdeValues: prevState.subMdeValues
+      }
+    }
+    return null
+  }
+
+  // FIXME:迁移到getDerivedStateFromProps生命周期中
+  // componentWillReceiveProps(nextProps: IProps) {
+  //   // 如果发布评论后要更新props上的comments列表
+  //   if (this.props.comments.length !== nextProps.comments.length) {
+  //     this.setState(prevState => {
+  //       prevState.subCommentSwitches.push(false)
+  //       prevState.subMdeValues.push({
+  //         isReply: false,
+  //         index: -1,
+  //         comment: ''
+  //       })
+  //       return {
+  //         subCommentSwitches: prevState.subCommentSwitches,
+  //         subMdeValues: prevState.subMdeValues
+  //       }
+  //     })
+  //   }
+  // }
   componentDidMount() {
     this.initialState(this.props.comments)
   }
 
-  // FIXME:迁移到getDerivedStateFromProps生命周期中
-  componentWillReceiveProps(nextProps: IProps) {
-    // 如果发布评论后要更新props上的comments列表
-    if (this.props.comments.length !== nextProps.comments.length) {
-      this.setState(prevState => {
-        prevState.subCommentSwitches.push(false)
-        prevState.subMdeValues.push({
-          isReply: false,
-          index: -1,
-          comment: ''
-        })
-        return {
-          subCommentSwitches: prevState.subCommentSwitches,
-          subMdeValues: prevState.subMdeValues
-        }
-      })
-    }
-  }
   // 初始化需要控制的子评论的显示开关集合和子评论的编辑器的value值的集合
-  initialState = (comments: any) => {
+  initialState = (comments: any[]) => {
     const subCommentSwitches: any[] = []
     const subMdeValues: any[] = []
     comments.forEach(() => {
@@ -71,6 +97,7 @@ class CommentsList extends React.Component<IProps, IState> {
     })
     this.setState({ subCommentSwitches, subMdeValues })
   }
+
   // 评论点赞
   submitLike = async (item: any) => {
     const { articleId, userInfo } = this.props
@@ -141,7 +168,6 @@ class CommentsList extends React.Component<IProps, IState> {
         subMdeValues: prevState.subMdeValues
       }
     })
-    // this.setState({ comment: simplemde.value() })
   }
   // 子评论的提交 需要区别是评论还是回复评论
   submitSubComment = async (comment: any, index: number) => {
@@ -152,6 +178,10 @@ class CommentsList extends React.Component<IProps, IState> {
     const { articleId, userInfo } = this.props
     const commentId = comment.id
     const userId = userInfo.id
+    if (!userId) {
+      message.info('请先注册登录，再进行评论~~')
+      return
+    }
     // 如果是回复评论则取子评论的用户id 否则要取一级评论的id
     const respUserId = this.state.subMdeValues[index].isReply
       ? comment.subComments[this.state.subMdeValues[index].index].userId
@@ -200,16 +230,23 @@ class CommentsList extends React.Component<IProps, IState> {
   }
   // 点击子评论下的回复btn时 将请求需要的数据传入对应subMdeValues集合中
   handleIsReplyBtn = (subComment: any, index: number, subIndex: number) => {
-    this.setState(prevState => {
-      prevState.subMdeValues[index].isReply = true
-      prevState.subMdeValues[index].index = subIndex
-      prevState.subMdeValues[index].comment = `回复 ${
-        subComment.userInfo.username
-      } : `
-      return {
-        subMdeValues: prevState.subMdeValues
+    let value: string
+    this.setState(
+      prevState => {
+        prevState.subMdeValues[index].isReply = true
+        prevState.subMdeValues[index].index = subIndex
+        value = `回复 ${subComment.userInfo.username} : `
+        prevState.subMdeValues[index].comment = value
+        return {
+          subMdeValues: prevState.subMdeValues
+        }
+      },
+      () => {
+        if (this.mdRef[index]) {
+          this.mdRef[index].focus(value)
+        }
       }
-    })
+    )
   }
 
   render() {
@@ -301,7 +338,7 @@ class CommentsList extends React.Component<IProps, IState> {
                                       1
                                     )}
                                   </Avatar>
-                                  <div style={{marginLeft: '42px'}}>
+                                  <div style={{ marginLeft: '42px' }}>
                                     <div className={styles.commentTitle}>
                                       <span
                                         className={styles.subCommentUsername}
@@ -372,6 +409,7 @@ class CommentsList extends React.Component<IProps, IState> {
                         }}
                       /> */}
                       <MdEditor
+                        ref={mdRef => (this.mdRef[index] = mdRef)}
                         id={`markdown-editor-${item.id}`}
                         value={
                           this.state.subMdeValues[index]

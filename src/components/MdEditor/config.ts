@@ -13,7 +13,7 @@ interface ISimpleMDE extends SimpleMDE {
   options: IOptions
   element: HTMLTextAreaElement
   markdown(text: string): void
-  render(el: HTMLElement): void
+  render(el?: HTMLElement): void
   autosave(): void
   createSideBySide(): Element
   createToolbar(items?: Array<string | SimpleMDE.ToolbarIcon>): Element
@@ -45,11 +45,11 @@ interface ISimpleMDE extends SimpleMDE {
   getState(): any
 }
 
-function _replaceSelection(
+export function _replaceSelection(
   cm: any,
   active: boolean,
   startEnd: string[],
-  url: string
+  url?: string
 ) {
   const reg = /editor-preview-active/
   if (reg.test(cm.getWrapperElement().lastChild.className)) {
@@ -61,6 +61,7 @@ function _replaceSelection(
   let end = startEnd[1]
   const startPoint = cm.getCursor('start')
   const endPoint = cm.getCursor('end')
+  console.log(startPoint, endPoint)
   if (url) {
     end = end.replace('#url#', url)
   }
@@ -188,5 +189,7 @@ export const generateId = () => {
   id += 1
   return `markdown-editor-${id}`
 }
+
+export { ISimpleMDE }
 
 export default config

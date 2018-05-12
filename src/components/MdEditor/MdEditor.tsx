@@ -3,7 +3,7 @@ import * as React from 'react'
 // import marked from 'marked'
 // import axios from 'axios'
 import './index.scss'
-import config from './config'
+import config, { ISimpleMDE } from './config'
 
 interface IProps {
   onChange: (simplemde: SimpleMDE) => void
@@ -14,19 +14,24 @@ interface IProps {
   id: string
   style?: React.CSSProperties
 }
+interface IState {
+  keyChange: boolean
+  isLoading: boolean
+}
 
-class MdEditor extends React.Component<IProps, {}> {
-  // static getDerivedStateFromProps(nextProps: any, prevState: any) {
-  //   return {
-  //     name: 'ni'
-  //   }
-  // }
-  simplemde: SimpleMDE
+class MdEditor extends React.Component<IProps, IState> {
+  simplemde: ISimpleMDE
   editorEl: Element
   editorToolbarEl: Element | null
   state = {
     keyChange: false,
     isLoading: false
+  }
+
+  static getDerivedStateFromProps(nextProps: IProps) {
+    return {
+      keyChange: false
+    }
   }
 
   componentDidMount() {
@@ -35,16 +40,22 @@ class MdEditor extends React.Component<IProps, {}> {
     this.addExtraKeys()
   }
 
-  // FIXME:迁移到getDerivedStateFromProps生命周期中
-  componentWillReceiveProps(nextProps: IProps) {
-    if (!this.state.keyChange && nextProps.value !== this.simplemde.value()) {
-      this.simplemde.value(nextProps.value)
+  componentDidUpdate(prevProps: IProps, prevState: IState) {
+    // console.log(this.simplemde)
+    if (!this.state.keyChange && this.props.value !== this.simplemde.value()) {
+      this.simplemde.value(this.props.value)
     }
-
-    this.setState({
-      keyChange: false
-    })
   }
+
+  // FIXME:迁移到getDerivedStateFromProps和componentDidUpdate生命周期中
+  // componentWillReceiveProps(nextProps: IProps) {
+  //   if (!this.state.keyChange && nextProps.value !== this.simplemde.value()) {
+  //     this.simplemde.value(nextProps.value)
+  //   }
+  //   this.setState({
+  //     keyChange: false
+  //   })
+  // }
 
   componentWillUnmount() {
     this.removeEvents()
@@ -61,6 +72,13 @@ class MdEditor extends React.Component<IProps, {}> {
     const { options } = this.props
     const allOptions = { ...initialOptions, ...options }
     this.simplemde = new SimpleMDE(allOptions)
+  }
+
+  // TODO:点击回复后SimpleMd需要聚焦
+  focus = (value: string) => {
+    this.simplemde.value(value)
+    this.simplemde.codemirror.setCursor({line: 0, ch: this.simplemde.value().length})
+    this.simplemde.codemirror.focus()
   }
 
   eventWrapper = () => {

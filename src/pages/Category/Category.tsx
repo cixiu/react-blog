@@ -45,27 +45,6 @@ interface IState {
 }
 
 class Category extends React.Component<IProps, IState> {
-  static getDerivedStateFromProps(
-    nextProps: IReduxInjectedProps,
-    prevState: IState
-  ) {
-    if (
-      nextProps.location.pathname !== prevState.pathname ||
-      nextProps.isLoading !== prevState.isLoading
-    ) {
-      console.log(
-        nextProps.location.pathname !== prevState.pathname,
-        nextProps.isLoading !== prevState.isLoading
-      )
-      return {
-        pathname: nextProps.location.pathname,
-        isLoading: nextProps.isLoading,
-        current: 0,
-        flag: true
-      }
-    }
-    return null
-  }
   state = {
     navList: [
       { sort: 'recently', text: '最近更新' },
@@ -83,6 +62,25 @@ class Category extends React.Component<IProps, IState> {
     return this.props as IReduxInjectedProps
   }
 
+  static getDerivedStateFromProps(
+    nextProps: IReduxInjectedProps,
+    prevState: IState
+  ) {
+    if (
+      nextProps.location.pathname !== prevState.pathname ||
+      nextProps.isLoading !== prevState.isLoading
+    ) {
+      return {
+        pathname: nextProps.location.pathname,
+        isLoading: nextProps.isLoading,
+        current: 0,
+        flag: true
+      }
+    }
+    return null
+  }
+
+  // FIXME:迁移到getDerivedStateFromProps生命周期中
   // componentWillReceiveProps(nextProps: IReduxInjectedProps) {
   //   if (
   //     this.injected.location.pathname !== nextProps.location.pathname ||

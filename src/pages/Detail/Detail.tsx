@@ -71,6 +71,10 @@ class Detail extends React.Component<IProps, IState> {
     const articleId = this.injected.articleDetail.id
     const userId = this.injected.userId
     const content = marked(this.state.comment)
+    if (!userId) {
+      message.info('请先注册登录，再进行评论~~')
+      return
+    }
     const res = await createComment(articleId, { userId, content })
     if (res.code === 0) {
       this.setState(prevState => {
