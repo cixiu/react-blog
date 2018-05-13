@@ -7,25 +7,26 @@ import marked from '../../common/ts/marked'
 import CommentsList from '../../components/CommentsList/CommentsList'
 import MdEditor from '../../components/MdEditor/MdEditor'
 import { SkeletonLoading } from '../../components/Loading/Loading'
-import { IStoreState } from '../../store/types'
 import { createComment, getArticleComments } from '../../api/comments'
+import { IStoreState, IUserInfo, IArticleDetail, IComment } from '../../store/types'
 
 import * as styles from '../../styles/Detail/Detail.scss'
 
 // const { TextArea } = Input
+
 interface IState {
   showComments: boolean
-  comments: any[]
+  comments: IComment[]
   comment: string
   count: number
 }
 
 interface IProps {}
 interface IReduxInjectedProps extends IProps {
-  articleDetail: IStoreState['articleDetail']
+  articleDetail: IArticleDetail
   isLoading: boolean
   userId: number
-  userInfo: IStoreState['userInfo']
+  userInfo: IUserInfo
 }
 class Detail extends React.Component<IProps, IState> {
   state: IState = {
@@ -54,7 +55,7 @@ class Detail extends React.Component<IProps, IState> {
     this.setState({ comment: simplemde.value() })
   }
 
-  supportComment = (comments: any[], needChangeCount = false) => {
+  supportComment = (comments: IComment[], needChangeCount = false) => {
     if (needChangeCount) {
       this.setState(prevState => ({
         count: prevState.count + 1

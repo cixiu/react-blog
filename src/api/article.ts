@@ -8,7 +8,12 @@ interface IGetArticleListParams {
   sort?: string
 }
 
-export const getArticleList = async ({offset = 0, limit = 10, category, sort }: IGetArticleListParams) => {
+export const getArticleList = async ({
+  offset = 0,
+  limit = 10,
+  category,
+  sort
+}: IGetArticleListParams) => {
   try {
     const res = await axios.get(`${baseUrl}/api/article/list`, {
       params: {

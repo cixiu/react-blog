@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
 import Link from 'redux-first-router-link'
-import { Layout, Row, Col, Button, Input, Icon, message } from 'antd'
+import { Layout, Row, Col, Button, Input, Icon, message, notification } from 'antd'
 import { postLoginThunk } from '../../store/actions'
 import { IStoreState } from '../../store/types'
 import * as styles from './index.scss'
@@ -19,8 +19,8 @@ interface IReduxInjectProps extends IProps {
 }
 
 class MHeader extends React.Component<IProps, {}> {
-  UserName: HTMLInputElement | null = null
-  Password: HTMLInputElement | null = null
+  UserName!: HTMLInputElement | null
+  Password!: HTMLInputElement | null
 
   state = {
     visible: false,
@@ -61,6 +61,18 @@ class MHeader extends React.Component<IProps, {}> {
     }
   }
 
+  // TODO:搜索文章的功能
+  search = (value: string) => {
+    if (!value) {
+      return
+    }
+    notification.info({
+      message: '暂未开放',
+      description: '搜索功能暂未开放，敬请期待~~'
+    })
+  }
+  // TODO:登录后需要在顶部显示用户登录的信息
+
   render() {
     return (
       <div className={styles.mainHeaderContainer}>
@@ -77,10 +89,10 @@ class MHeader extends React.Component<IProps, {}> {
                   </Button>
                 </Link>
               </Col>
-              <Col xs={0} sm={0} md={0} lg={8}>
+              <Col xs={0} sm={0} md={8} lg={8}>
                 <Search
                   placeholder="搜索文章"
-                  onSearch={value => console.log(value)}
+                  onSearch={value => this.search(value)}
                   enterButton
                   size="large"
                 />
@@ -88,7 +100,7 @@ class MHeader extends React.Component<IProps, {}> {
               <Col
                 xs={16}
                 sm={16}
-                md={16}
+                md={8}
                 lg={8}
                 style={{
                   display: 'flex',

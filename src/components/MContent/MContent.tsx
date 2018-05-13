@@ -26,7 +26,10 @@ class MContent extends React.Component<IProps, {}> {
       { tag: 'vue', text: 'Vue' },
       { tag: 'angular', text: 'Angular' },
       { tag: 'webpack', text: 'Webpack' },
-      { tag: 'node', text: 'Node' }
+      { tag: 'node', text: 'Node' },
+      { tag: 'zhuanzai', text: '转载' },
+      { tag: 'others', text: '其他' },
+      { tag: 'test', text: '测试' }
     ]
   }
 

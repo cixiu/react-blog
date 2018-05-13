@@ -44,6 +44,7 @@
   padding: 0 12px;
   height: 100%;
   font-size: 16px;
+  white-space: nowrap;
   cursor: pointer;
   &:first-child {
     padding: 0 12px 0 0;
@@ -66,6 +67,9 @@
   }
 }
 :global {
+  a:focus {
+    text-decoration: none;
+  }
   .ant-back-top {
     z-index: 998;
     right: 24px;

@@ -1,6 +1,5 @@
 import { LocationState } from 'redux-first-router'
 interface ICategory {
-  _id: string
   title: string
 }
 
@@ -25,6 +24,26 @@ export interface IUserInfo {
   creatAt: number
   create_time: string
   create_address: string
+}
+
+export interface ISubComment {
+  content: string
+  createAt: number
+  id: number
+  likedUser: IUserInfo[]
+  isLiked: boolean
+  likesCount: number
+  respComment: boolean
+  respUserId: number
+  respUserInfo: object
+  topComment: any[]
+  subCount: number
+  updateAt: string
+  userId: number
+  userInfo: IUserInfo
+}
+export interface IComment extends ISubComment {
+  subComments: ISubComment[]
 }
 
 export interface IStoreState {

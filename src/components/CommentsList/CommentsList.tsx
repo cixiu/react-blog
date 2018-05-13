@@ -5,32 +5,33 @@ import * as classNames from 'classnames/bind'
 import MdEditor from '../MdEditor/MdEditor'
 import marked from '../../common/ts/marked'
 import { likeComment, replyComment } from '../../api/comments'
-import { IUserInfo } from '../../store/types'
+import { IUserInfo, IComment, ISubComment } from '../../store/types'
 
 import * as styles from './index.scss'
 
 const cx = classNames.bind(styles)
+interface ISubMdeValue {
+  isReply: boolean
+  index: number
+  comment: string
+}
 interface IProps {
-  comments: any[]
+  comments: IComment[]
   articleId: number
   userInfo: IUserInfo
-  supportComment(comments: any[], needChangeCount?: boolean): void
+  supportComment(comments: IComment[], needChangeCount?: boolean): void
 }
 interface IState {
   subCommentSwitches: boolean[]
-  subMdeValues: Array<{
-    isReply: boolean
-    index: number
-    comment: string
-  }>
+  subMdeValues: ISubMdeValue[]
   currentSubIndex: number
   currentCommentIndex: number
   mirrorCommentsLength: number
 }
 
 class CommentsList extends React.Component<IProps, IState> {
-  commentArrowGroup: any[] = [] as HTMLDivElement[]
-  titleGroup: any[] = [] as HTMLSpanElement[]
+  commentArrowGroup: Array<HTMLDivElement | any> = []
+  titleGroup: Array<HTMLSpanElement | any> = []
   mdRef: Array<MdEditor | any> = []
 
   state: IState = {
@@ -83,9 +84,9 @@ class CommentsList extends React.Component<IProps, IState> {
   }
 
   // 初始化需要控制的子评论的显示开关集合和子评论的编辑器的value值的集合
-  initialState = (comments: any[]) => {
-    const subCommentSwitches: any[] = []
-    const subMdeValues: any[] = []
+  initialState = (comments: IComment[]) => {
+    const subCommentSwitches: boolean[] = []
+    const subMdeValues: ISubMdeValue[] = []
     comments.forEach(() => {
       subCommentSwitches.push(false)
       // 初始化simplemde的value值的集合
@@ -99,7 +100,7 @@ class CommentsList extends React.Component<IProps, IState> {
   }
 
   // 评论点赞
-  submitLike = async (item: any) => {
+  submitLike = async (item: IComment) => {
     const { articleId, userInfo } = this.props
     const data = {
       commentId: item.id,
@@ -115,7 +116,7 @@ class CommentsList extends React.Component<IProps, IState> {
       } else {
         // 如果是取消点赞
         item.likedUser = item.likedUser.filter(
-          (user: any) => user.id !== userInfo.id
+          (user: IUserInfo) => user.id !== userInfo.id
         )
         item.isLiked = res.isLiked
         item.likesCount = res.likesCount
@@ -134,7 +135,7 @@ class CommentsList extends React.Component<IProps, IState> {
     }
   }
   // 子评论的显示与隐藏操作
-  showSubComments = (comment: any, index: number) => {
+  showSubComments = (comment: IComment, index: number) => {
     if (this.commentArrowGroup[index].style.display === 'none') {
       this.titleGroup[index].innerHTML = '收起评论'
       this.commentArrowGroup[index].style.display = 'block'
@@ -170,7 +171,7 @@ class CommentsList extends React.Component<IProps, IState> {
     })
   }
   // 子评论的提交 需要区别是评论还是回复评论
-  submitSubComment = async (comment: any, index: number) => {
+  submitSubComment = async (comment: IComment, index: number) => {
     if (!this.state.subMdeValues[index].comment) {
       message.info('请先写点什么再进行评论')
       return
@@ -221,7 +222,7 @@ class CommentsList extends React.Component<IProps, IState> {
     }
   }
   // 在对应的子评论上mouseover时 显示回复btn
-  showReplyBtn = (comment: any, subIndex: number, index: number) => {
+  showReplyBtn = (comment: IComment, subIndex: number, index: number) => {
     this.setState({ currentSubIndex: subIndex, currentCommentIndex: index })
   }
   // 在对应的子评论上mouseout时 隐藏回复btn
@@ -229,7 +230,7 @@ class CommentsList extends React.Component<IProps, IState> {
     this.setState({ currentSubIndex: -1, currentCommentIndex: -1 })
   }
   // 点击子评论下的回复btn时 将请求需要的数据传入对应subMdeValues集合中
-  handleIsReplyBtn = (subComment: any, index: number, subIndex: number) => {
+  handleIsReplyBtn = (subComment: ISubComment, index: number, subIndex: number) => {
     let value: string
     this.setState(
       prevState => {

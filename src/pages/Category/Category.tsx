@@ -194,7 +194,7 @@ class Category extends React.Component<IProps, IState> {
               {!this.injected.isLoading &&
                 articleList.map(article => (
                   <li className={styles.listItem} key={article.id}>
-                    <Link to={`/detail/${article.id}`} target="__blank">
+                    <Link to={`/detail/${article.id}`} target="_blank">
                       <div className={styles.articel}>
                         {article.screenshot && (
                           <div className={styles.articelScreenshotContainer}>
@@ -229,9 +229,9 @@ class Category extends React.Component<IProps, IState> {
                               </span>
                             </span>
                             <span className={styles.labels}>
-                              {article.category.map(tag => (
-                                <span key={tag.title} style={{ marginLeft: 6 }}>
-                                  {tag.title}
+                              {article.category.map(cate => (
+                                <span key={cate.title} style={{ marginLeft: 6 }}>
+                                  {cate.title}
                                 </span>
                               ))}
                             </span>
