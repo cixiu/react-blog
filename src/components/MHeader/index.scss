@@ -11,7 +11,14 @@
   left: 0;
   right: 0;
   padding: 0;
-  background: $color-primary;
+  background: #fff;
+  border-bottom: 1px solid #f1f1f1;
+  transition: all .2s;
+  transform: translateZ(0);
+}
+.hidden {
+  transition: all .2s;
+  transform: translate3d(0, -100%, 0);
 }
 .inner-container {
   display: flex;
@@ -25,19 +32,31 @@
 }
 .logo {
   flex: 48px 0 0;
-  margin-right: 14px;
+  margin-right: 2em;
   line-height: 0;
 }
 .logo-img {
-  width: 48px;
   height: 48px;
 }
-.home {
-  color: #fff;
-  text-decoration: none;
+.search {
+  max-width: 300px;
+  margin-right: 1.5em;
+  @media (max-width: 576px) {
+    display: none;
+  }
 }
-.home:hover {
-  color: red;
+.login-or-register {
+  flex: 0 0 120px;
+  padding: 0 18px;
+  font-size: 16px;
+  color: $color-primary;
+  cursor: pointer;
+}
+.login {
+  &:after {
+    content: '·';
+    margin: 0 6px;
+  }
 }
 .login-modal-box {
   display: flex;

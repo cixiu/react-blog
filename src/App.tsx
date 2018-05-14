@@ -5,11 +5,17 @@ import MHeader from './components/MHeader/MHeader'
 import MContent from './components/MContent/MContent'
 
 class App extends React.Component {
+  state = {
+    flag: false
+  }
+  changeProps = (flag: boolean) => {
+    this.setState({ flag })
+  }
   render() {
     return (
       <Layout className="view-container" style={{ background: '#f5f5f5' }}>
-        <MHeader />
-        <MContent />
+        <MHeader changeProps={this.changeProps} />
+        <MContent flag={this.state.flag}/>
       </Layout>
     )
   }

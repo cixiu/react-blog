@@ -25,6 +25,10 @@
   transition: all 0.2s;
   transform: translateZ(0);
 }
+.slide-top {
+  transition: all 0.2s;
+  transform: translate3d(0, -64px, 0);
+}
 .nav-list {
   display: flex;
   align-items: center;

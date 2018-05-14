@@ -2,12 +2,18 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'redux-first-router-link'
 import { BackTop } from 'antd'
+import * as classNames from 'classnames/bind'
 import Router from '../Router/Router'
 import Aside from '../Aside/Aside'
-import * as styles from './index.scss'
 import { changeIsLoading } from '../../store/actions'
 import { IStoreState } from '../../store/types'
-interface IProps {}
+
+import * as styles from './index.scss'
+
+const cx = classNames.bind(styles)
+interface IProps {
+  flag: boolean
+}
 interface IReduxInjectedProps extends IProps {
   page: string
   changeIsLoading: (flag: boolean) => void
@@ -41,14 +47,13 @@ class MContent extends React.Component<IProps, {}> {
     return (
       <div className={styles.mainContentContainer}>
         <div
-          className={
-            this.injected.page === 'Category'
-              ? `${styles.mainContent} ${styles.hasViewNav}`
-              : `${styles.mainContent}`
-          }
+          className={cx({
+            mainContent: true,
+            hasViewNav: this.injected.page === 'Category'
+          })}
         >
           {this.injected.page === 'Category' && (
-            <nav className={styles.viewNav}>
+            <nav className={cx({ viewNav: true, slideTop: this.props.flag })}>
               <ul className={styles.navList}>
                 {this.state.tags.map(item => (
                   <NavLink

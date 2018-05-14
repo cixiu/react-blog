@@ -10,8 +10,8 @@ interface IReduxInjectedProps extends IProps {
 }
 
 class Login extends React.Component<IProps, {}> {
-  UserName: HTMLInputElement | null = null
-  Password: HTMLInputElement | null = null
+  UserName!: HTMLInputElement | null
+  Password!: HTMLInputElement | null
 
   state = {
     loading: false
@@ -33,13 +33,13 @@ class Login extends React.Component<IProps, {}> {
       const res = await this.injected.postLoginThunk(username, password)
       if (res.code === 0) {
         message.success(res.message)
-        window.location.reload()
       } else {
         message.info(res.message)
         this.setState({ loading: false })
       }
     }
   }
+
   render() {
     return (
       <div className="aside-box">

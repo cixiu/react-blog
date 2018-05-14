@@ -1,35 +1,87 @@
 import * as React from 'react'
 import { connect } from 'react-redux'
-import Link from 'redux-first-router-link'
-import { Layout, Row, Col, Button, Input, Icon, message, notification } from 'antd'
-import { postLoginThunk } from '../../store/actions'
+import { Location } from 'redux-first-router'
+import Link, { NavLink, Match } from 'redux-first-router-link'
+import {
+  Layout,
+  Row,
+  Col,
+  Button,
+  Input,
+  Icon,
+  Tooltip,
+  Dropdown,
+  Menu,
+  Avatar,
+  message,
+  notification
+} from 'antd'
+import { ClickParam } from 'antd/lib/menu'
+import * as classNames from 'classnames/bind'
+import * as types from '../../store/actionTypes/routerTypes'
+import { postLoginThunk, addUserId, addUserInfo } from '../../store/actions'
+import { goToPage } from '../../store/actions/routerActions'
+import { logout } from '../../api/user'
 import { IStoreState } from '../../store/types'
 import * as styles from './index.scss'
 
-const logo = require('../../common/images/react.svg')
+const logo = require('../../common/images/blog-logo.png')
 const { Header } = Layout
 const { Search } = Input
+const cx = classNames.bind(styles)
 
-interface IProps {}
+interface IProps {
+  changeProps: (flag: boolean) => void
+}
 interface IReduxInjectProps extends IProps {
   page: string
   location: IStoreState['location']
   userInfo: IStoreState['userInfo']
   postLoginThunk: (username: string, password: string) => any
+  addUserId: (id: number) => void
+  addUserInfo: (info: object) => void
+  goToPage: (type: string, category?: string) => void
 }
 
 class MHeader extends React.Component<IProps, {}> {
   UserName!: HTMLInputElement | null
   Password!: HTMLInputElement | null
+  scrollTop = 0
 
   state = {
     visible: false,
-    loading: false
+    loading: false,
+    flag: false
   }
-  componentDidMount() {}
 
   get injected() {
     return this.props as IReduxInjectProps
+  }
+
+  // TODO:页面滚动到一定距离后，再向下滚，则header导航隐藏
+  componentDidMount() {
+    if (this.injected.page === 'Category') {
+      window.addEventListener('scroll', ev => {
+        const scrollTop =
+          document.body.scrollTop || document.documentElement.scrollTop
+        if (scrollTop > 112) {
+          if (scrollTop > this.scrollTop) {
+            this.setState({ flag: true })
+            this.props.changeProps(true)
+          } else {
+            this.setState({ flag: false })
+            this.props.changeProps(false)
+          }
+          this.scrollTop = scrollTop
+        }
+      })
+    }
+  }
+
+  // FIXME:首页高亮判断
+  isActive = (match: Match<{}>, location: Location) => {
+    // 如果页面的地址加载的是CATEGORY类型，则表示当前页面是首页
+    return location.type === 'CATEGORY'
   }
 
   showModal = () => {
@@ -52,8 +104,8 @@ class MHeader extends React.Component<IProps, {}> {
       const res = await this.injected.postLoginThunk(username, password)
       if (res.code === 0) {
         message.success(res.message)
-        this.setState({ visible: false })
-        window.location.reload()
+        this.setState({ visible: false, loading: false })
+        // window.location.reload()
       } else {
         message.info(res.message)
         this.setState({ loading: false })
@@ -67,74 +119,102 @@ class MHeader extends React.Component<IProps, {}> {
       return
     }
     notification.info({
-      message: '暂未开放',
+      message: '提示',
       description: '搜索功能暂未开放，敬请期待~~'
     })
   }
-  // TODO:登录后需要在顶部显示用户登录的信息
+  // FIXME:登录后需要在顶部显示用户登录的信息
+  handleDropdown = async ({ key, item, keyPath }: ClickParam) => {
+    if (key === 'home') {
+      this.injected.goToPage(types.CATEGORY, 'all')
+    } else if (key === 'logout') {
+      const res = await logout()
+      if (res.code === 0) {
+        this.injected.addUserId(0)
+        this.injected.addUserInfo({})
+        message.success(res.message)
+      } else {
+        message.error(res.message)
+      }
+    }
+  }
 
   render() {
     return (
       <div className={styles.mainHeaderContainer}>
-        <Header className={styles.miniHeader}>
+        <Header
+          className={cx({
+            miniHeader: true,
+            hidden: this.state.flag
+          })}
+        >
           <header className={styles.innerContainer}>
             <Link to="/" className={styles.logo}>
               <img className={styles.logoImg} src={logo} alt="logo" />
             </Link>
             <Row type="flex" gutter={16} style={{ flex: 1 }}>
               <Col xs={8} sm={8} md={8} lg={8}>
-                <Link to="/">
-                  <Button type="primary" size="large">
-                    首页
-                  </Button>
-                </Link>
-              </Col>
-              <Col xs={0} sm={0} md={8} lg={8}>
-                <Search
-                  placeholder="搜索文章"
-                  onSearch={value => this.search(value)}
-                  enterButton
-                  size="large"
-                />
+                <NavLink
+                  to="/"
+                  style={{ display: 'flex', fontSize: '16px' }}
+                  activeStyle={{ color: '#1890ff' }}
+                  isActive={this.isActive}
+                >
+                  首页
+                </NavLink>
               </Col>
               <Col
                 xs={16}
                 sm={16}
-                md={8}
-                lg={8}
+                md={16}
+                lg={16}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'flex-end'
                 }}
               >
-                {!this.injected.userInfo.username && (
-                  <div className="login-or-register">
-                    <Button
-                      type="primary"
-                      size="large"
-                      onClick={this.showModal}
-                    >
+                <Search
+                  className={styles.search}
+                  placeholder="搜索文章"
+                  onSearch={value => this.search(value)}
+                  size="large"
+                />
+                {!this.injected.userInfo.username ? (
+                  <div className={styles.loginOrRegister}>
+                    <span className={styles.login} onClick={this.showModal}>
                       登录
-                    </Button>
-                    <Button
-                      type="primary"
-                      size="large"
-                      onClick={this.showModal}
+                    </span>
+                    <span onClick={this.showModal}>注册</span>
+                  </div>
+                ) : (
+                  <div style={{ marginRight: '1.5em' }}>
+                    <Dropdown
+                      overlay={
+                        <Menu onClick={this.handleDropdown}>
+                          <Menu.Item key="home">首页</Menu.Item>
+                          <Menu.Item key="logout">退出登录</Menu.Item>
+                        </Menu>
+                      }
                     >
-                      注册
-                    </Button>
+                      <Avatar icon="user" size="large" />
+                    </Dropdown>
                   </div>
                 )}
-                <Button
-                  type="primary"
+                <a
                   href="https://github.com/cixiu/react-blog"
-                  target="__blank"
-                  size="large"
-                  style={{ lineHeight: '48px', padding: 0 }}
+                  target="_blank"
+                  style={{ display: 'flex' }}
                 >
-                  <Icon type="github" style={{ fontSize: 32 }} />
-                </Button>
+                  <Tooltip title="点击进入github" placement="bottomRight">
+                    <Icon
+                      type="github"
+                      style={{
+                        fontSize: 40
+                      }}
+                    />
+                  </Tooltip>
+                </a>
               </Col>
             </Row>
           </header>
@@ -197,7 +277,12 @@ const mapStateToProps = ({ page, location, userInfo }: IStoreState) => {
   }
 }
 
-const mapDispatchToProps = { postLoginThunk }
+const mapDispatchToProps = {
+  postLoginThunk,
+  addUserId,
+  addUserInfo,
+  goToPage
+}
 
 const mergeProps = (
   stateProps: object,
