@@ -20,6 +20,24 @@ class Aside extends React.Component<IProps, {}> {
     return (
       <aside className={styles.aside}>
         {this.injected.userInfo.username ? <UserInfo /> : <Login />}
+        <div style={{ background: '#fff' }}>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+        </div>
       </aside>
     )
   }

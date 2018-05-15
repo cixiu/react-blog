@@ -5,10 +5,11 @@
   margin: 0 auto;
   width: 100%;
   max-width: 1080px;
+  z-index: 1;
 }
 .main-content {
   position: relative;
-  margin-top: 26px;
+  // margin-top: 26px;
 }
 .has-view-nav {
   margin-top: 74px;
@@ -26,7 +27,6 @@
   transform: translateZ(0);
 }
 .slide-top {
-  transition: all 0.2s;
   transform: translate3d(0, -64px, 0);
 }
 .nav-list {
@@ -64,11 +64,15 @@
   }
 }
 .main {
+  margin-top: 26px;
   margin-right: 260px;
   height: auto;
   @media (max-width: 768px) {
     width: 100%;
   }
+}
+.is-not-found {
+  margin: 0;
 }
 :global {
   a:focus {

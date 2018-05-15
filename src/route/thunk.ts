@@ -1,13 +1,14 @@
 import { Dispatch } from 'react-redux'
+import { LocationState, NOT_FOUND } from 'redux-first-router'
 import { IStoreState } from '../store/types'
 import { getArticleList, getArticleDetail } from '../api/article'
-import { LocationState } from 'redux-first-router'
 import {
   addArticleList,
   changeHasMore,
   changeIsLoading,
-  addArticleDetail
+  addArticleDetail,
 } from '../store/actions'
+import { goToPage } from '../store/actions/routerActions'
 
 interface ILocation extends LocationState {
   payload: {
@@ -60,7 +61,7 @@ export const thunkArticleDetail = async (
   if (res.code === 0) {
     dispatch(addArticleDetail(res.data))
   } else {
-    dispatch(addArticleDetail())
+    dispatch(goToPage(NOT_FOUND))
   }
   const endThunk = +new Date()
   console.log('数据初始化用时:' + (endThunk - startThunk) + 'ms')

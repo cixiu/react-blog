@@ -69,10 +69,15 @@ class MContent extends React.Component<IProps, {}> {
               </ul>
             </nav>
           )}
-          <main className={styles.main}>
+          <main
+            className={cx({
+              main: true,
+              isNotFound: this.injected.page === 'NotFound'
+            })}
+          >
             <Router />
           </main>
-          <Aside />
+          {this.injected.page !== 'NotFound' && <Aside />}
           <BackTop />
         </div>
       </div>

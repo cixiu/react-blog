@@ -47,10 +47,12 @@ class MHeader extends React.Component<IProps, {}> {
   UserName!: HTMLInputElement | null
   Password!: HTMLInputElement | null
   scrollTop = 0
+  isListenScroll = false
 
   state = {
     visible: false,
     loading: false,
+    // isListenScroll: false,
     flag: false
   }
 
@@ -61,21 +63,47 @@ class MHeader extends React.Component<IProps, {}> {
   // TODO:页面滚动到一定距离后，再向下滚，则header导航隐藏
   componentDidMount() {
     if (this.injected.page === 'Category') {
-      window.addEventListener('scroll', ev => {
-        const scrollTop =
-          document.body.scrollTop || document.documentElement.scrollTop
-        if (scrollTop > 112) {
-          if (scrollTop > this.scrollTop) {
-            this.setState({ flag: true })
-            this.props.changeProps(true)
-          } else {
-            this.setState({ flag: false })
-            this.props.changeProps(false)
-          }
-          this.scrollTop = scrollTop
-        }
-      })
+      this.isListenScroll = true
+      const scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop
+      if (scrollTop > 112) {
+        this.scrollTop = scrollTop
+        this.setState({flag: true})
+        this.props.changeProps(true)
+      }
+      this.listenScroll()
     }
+  }
+
+  componentDidUpdate(prevProps: IReduxInjectProps) {
+    // 如果切换了导航 重置this.scrollTop = 0
+    if (this.injected.location.pathname !== prevProps.location.pathname) {
+      this.scrollTop = 0
+      this.setState({flag: false})
+      this.props.changeProps(false)
+    }
+    if (!this.isListenScroll) {
+      this.isListenScroll = true
+      this.listenScroll()
+    }
+  }
+
+  // TODO:页面滚动到一定距离后，再向下滚，则header导航隐藏
+  listenScroll = () => {
+    window.addEventListener('scroll', ev => {
+      const scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop
+      if (scrollTop > 112) {
+        if (scrollTop > this.scrollTop) {
+          this.setState({ flag: true })
+          this.props.changeProps(true)
+        } else {
+          this.setState({ flag: false })
+          this.props.changeProps(false)
+        }
+        this.scrollTop = scrollTop
+      }
+    })
   }
 
   // FIXME:首页高亮判断

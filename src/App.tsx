@@ -6,7 +6,7 @@ import MContent from './components/MContent/MContent'
 
 class App extends React.Component {
   state = {
-    flag: false
+    flag: false   // 用于控制分类导航栏的上滚和下滚
   }
   changeProps = (flag: boolean) => {
     this.setState({ flag })

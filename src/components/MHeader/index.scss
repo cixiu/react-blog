@@ -17,7 +17,6 @@
   transform: translateZ(0);
 }
 .hidden {
-  transition: all .2s;
   transform: translate3d(0, -100%, 0);
 }
 .inner-container {

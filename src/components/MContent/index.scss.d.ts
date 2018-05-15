@@ -6,3 +6,4 @@ export const slideTop: string;
 export const navList: string;
 export const navItem: string;
 export const main: string;
+export const isNotFound: string;

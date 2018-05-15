@@ -1,0 +1,57 @@
+.view-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  z-index: -1;
+}
+.not-found-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0 40px 0;
+}
+.bg-container {
+  position: relative;
+  width: 666px;
+  max-width: 70%;
+  padding-top: 46%;
+}
+.img {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+}
+.cloud {
+  width: 75%;
+  transform: translate3d(-50%, -55%, 0);
+}
+.xiaoxiong {
+  width: 20%;
+  transform: translate3d(-55%, 22%, 0);
+  animation: UpDown 2s ease-in-out alternate infinite;
+}
+.sea {
+  width: 90%;
+  transform: translate3d(-50%, 71.2%, 0);
+  opacity: .7;
+}
+.spray {
+  width: 42%;
+  transform: translate3d(-58%, 133%, 0);
+  opacity: .4;
+}
+
+:global {
+  @keyframes UpDown {
+    0% {
+      transform: translate3d(-55%, 22%, 0);
+    }
+    to {
+      transform: translate3d(-55%, 30%, 0);
+    }
+  }
+}
