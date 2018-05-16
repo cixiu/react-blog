@@ -39,7 +39,13 @@ class Detail extends React.Component<IProps, IState> {
     return this.props as IReduxInjectedProps
   }
 
+  // TODO:点击图片放大
   async componentDidMount() {
+    window.addEventListener('click', (ev: any) => {
+      if (ev.target.nodeName === 'IMG') {
+        // console.log(ev.target)
+      }
+    })
     const { articleDetail, userId } = this.injected
     const res = await getArticleComments(articleDetail.id, userId)
     if (res.code === 0 && res.data.count) {

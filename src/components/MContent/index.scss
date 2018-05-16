@@ -25,6 +25,16 @@
   background-color: #fff;
   transition: all 0.2s;
   transform: translateZ(0);
+  &:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 200%;
+    z-index: -1;
+    background: #fff;
+  }
 }
 .slide-top {
   transform: translate3d(0, -64px, 0);
@@ -86,7 +96,7 @@
     background-color: $color-primary;
     opacity: 0.3;
   }
-  .ant-back-top-content:hover{
+  .ant-back-top-content:hover {
     background-color: $color-primary;
     opacity: 1;
   }
