@@ -18,6 +18,7 @@ import {
 } from 'antd'
 import { ClickParam } from 'antd/lib/menu'
 import * as classNames from 'classnames/bind'
+// import { debounce } from '../../common/ts/util'
 import * as types from '../../store/actionTypes/routerTypes'
 import { postLoginThunk, addUserId, addUserInfo } from '../../store/actions'
 import { goToPage } from '../../store/actions/routerActions'
@@ -62,24 +63,22 @@ class MHeader extends React.Component<IProps, {}> {
 
   // TODO:页面滚动到一定距离后，再向下滚，则header导航隐藏
   componentDidMount() {
-    if (this.injected.page === 'Category') {
-      this.isListenScroll = true
-      const scrollTop =
-        document.body.scrollTop || document.documentElement.scrollTop
-      if (scrollTop > 112) {
-        this.scrollTop = scrollTop
-        this.setState({flag: true})
-        this.props.changeProps(true)
-      }
-      this.listenScroll()
+    this.isListenScroll = true
+    const scrollTop =
+      document.body.scrollTop || document.documentElement.scrollTop
+    if (scrollTop > 228) {
+      this.scrollTop = scrollTop
+      this.setState({ flag: true })
+      this.props.changeProps(true)
     }
+    this.listenScroll()
   }
 
   componentDidUpdate(prevProps: IReduxInjectProps) {
     // 如果切换了导航 重置this.scrollTop = 0
     if (this.injected.location.pathname !== prevProps.location.pathname) {
       this.scrollTop = 0
-      this.setState({flag: false})
+      this.setState({ flag: false })
       this.props.changeProps(false)
     }
     if (!this.isListenScroll) {
@@ -90,10 +89,10 @@ class MHeader extends React.Component<IProps, {}> {
 
   // TODO:页面滚动到一定距离后，再向下滚，则header导航隐藏
   listenScroll = () => {
-    window.addEventListener('scroll', ev => {
+    window.addEventListener('scroll', () => {
       const scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop
-      if (scrollTop > 112) {
+      if (scrollTop > 228) {
         if (scrollTop > this.scrollTop) {
           this.setState({ flag: true })
           this.props.changeProps(true)
@@ -173,7 +172,7 @@ class MHeader extends React.Component<IProps, {}> {
         <Header
           className={cx({
             miniHeader: true,
-            hidden: this.state.flag
+            visible: !this.state.flag
           })}
         >
           <header className={styles.innerContainer}>
@@ -232,7 +231,7 @@ class MHeader extends React.Component<IProps, {}> {
                 <a
                   href="https://github.com/cixiu/react-blog"
                   target="_blank"
-                  style={{ display: 'flex' }}
+                  style={{ display: 'flex', flexShrink: 0 }}
                 >
                   <Tooltip title="点击进入github" placement="bottomRight">
                     <Icon

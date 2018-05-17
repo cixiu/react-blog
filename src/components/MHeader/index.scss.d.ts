@@ -1,6 +1,6 @@
 export const mainHeaderContainer: string;
 export const miniHeader: string;
-export const hidden: string;
+export const visible: string;
 export const innerContainer: string;
 export const logo: string;
 export const logoImg: string;

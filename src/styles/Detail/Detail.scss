@@ -55,7 +55,7 @@
     font-size: 24px;
   }
 }
-
+/* STYLE:文章详情样式 */
 .article-content {
   word-break: break-word;
   line-height: 1.75;
@@ -174,6 +174,7 @@
 }
 .article-content img {
   max-height: none;
+  cursor: zoom-in;
 }
 .article-content a {
   color: #0269c8;
@@ -303,6 +304,7 @@
   }
 }
 
+/* STYLE:评论列表样式 */
 .comments-container {
   position: relative;
   width: 820px;
@@ -324,7 +326,46 @@
   color: #fff;
   background-color: #69c0ff;
 }
-
 .comments-form {
   padding: 10px 24px;
+}
+
+/* STYLE:大图样式 */
+.image-viewer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+}
+.image-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  line-height: 0;
+  background: #fff;
+  overflow: auto;
+}
+.image {
+  position: absolute;
+  transition: all .2s;
+  cursor: zoom-out;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: all 200ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: all 200ms;
 }

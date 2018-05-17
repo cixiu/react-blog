@@ -63,7 +63,7 @@ class MContent extends React.Component<IProps, {}> {
                     to={`/category/${item.tag}`}
                     activeStyle={{ color: '#1890ff' }}
                   >
-                    {item.text}
+                    <span>{item.text}</span>
                   </NavLink>
                 ))}
               </ul>
