@@ -79,16 +79,21 @@ class Detail extends React.Component<IProps, IState> {
   }
 
   listenImgClick = (ev: any) => {
-    const target = ev.target || ev.srcElement
+    const target: HTMLImageElement = ev.target || ev.srcElement
     if (target.nodeName === 'IMG' && !this.state.showBigImage) {
       // 使用client宽高在移动端和pc断切换时为0，所以需要将原生natural宽高储存
-      this.setState({
-        showBigImage: true,
-        bigImageSrc: target.src,
-        naturalWidth: target.naturalWidth,
-        naturalHeight: target.naturalHeight,
-        smallImgRect: target.getBoundingClientRect()
-      })
+      const bigImageSrc = target.src.replace(/\?.+/, '?imageslim')
+      const image = new Image()
+      image.src = bigImageSrc
+      image.onload = () => {
+        this.setState({
+          showBigImage: true,
+          bigImageSrc,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+          smallImgRect: target.getBoundingClientRect()
+        })
+      }
     } else {
       this.setState({
         showBigImage: false,
@@ -146,7 +151,7 @@ class Detail extends React.Component<IProps, IState> {
     }
   }
 
-  setEnteringStyle = (el: HTMLElement) => {
+  setEnteringStyle = (el: HTMLImageElement) => {
     const { naturalWidth, naturalHeight } = this.state
     const { innerWidth, innerHeight } = window
     const clientScale = naturalWidth / naturalHeight
@@ -199,7 +204,7 @@ class Detail extends React.Component<IProps, IState> {
 
   // 使用react-transition-group/Transition组件提供的钩子函数来做运动
   // 在'entering'状态之前应用回调
-  enter = (el: HTMLElement) => {
+  enter = (el: HTMLImageElement) => {
     // 触发回流 详情见issue: https://github.com/reactjs/react-transition-group/issues/159
     /* tslint:disable no-unused-expression*/
     el && el.scrollTop // 强制触发浏览器回流
@@ -211,11 +216,11 @@ class Detail extends React.Component<IProps, IState> {
     el.style.left = `${left}px`
   }
   // 在'entering'状态之后应用回调
-  entering = (el: HTMLElement) => {
+  entering = (el: HTMLImageElement) => {
     this.setEnteringStyle(el)
   }
   // 在'entered'状态之后应用回调
-  entered = (el: HTMLElement) => {
+  entered = (el: HTMLImageElement) => {
     console.log('entered', el.getBoundingClientRect())
   }
   // 在'exiting'状态之前应用回调
@@ -231,7 +236,7 @@ class Detail extends React.Component<IProps, IState> {
     el.style.left = `${left}px`
   }
   // 在'exiting'状态之后应用回调
-  exiting = (el: HTMLElement) => {
+  exiting = (el: HTMLImageElement) => {
     const { width, height, top, left } = this.state.smallImgRect
     el.style.width = `${width}px`
     el.style.height = `${height}px`

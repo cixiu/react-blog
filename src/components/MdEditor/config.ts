@@ -61,7 +61,6 @@ export function _replaceSelection(
   let end = startEnd[1]
   const startPoint = cm.getCursor('start')
   const endPoint = cm.getCursor('end')
-  console.log(startPoint, endPoint)
   if (url) {
     end = end.replace('#url#', url)
   }
@@ -126,7 +125,7 @@ const config = {
           fileInput.addEventListener('change', async () => {
             if (fileInput.files && fileInput.files[0]) {
               const formData = new FormData()
-              // console.log(fileInput.files)
+              const imageType = fileInput.files[0].type.split('/')[1]
               formData.append('image', fileInput.files[0])
               const hide = message.loading('图片正在上传···', 0)
               const response = await axios.post('/api/admin/upload', formData)
@@ -134,6 +133,8 @@ const config = {
               // 图片上传失败的反馈
               if (res.code === 1) {
                 message.error(res.message)
+                hide()
+                return
               }
               // 无论最后上传是否成功 都要将提示信息隐藏
               hide()
@@ -141,6 +142,16 @@ const config = {
               const stat = editor.getState()
               const options = editor.options
               let url = res.image.url
+              // 如果上传的时gif图片 则返回图片瘦身的url图片样式
+              if (imageType.toUpperCase() === 'GIF') {
+                const imageslim = '?imageslim'
+                url += imageslim
+              } else {
+                // 否则返回的应该是指定宽高裁剪缩略图的url图片样式
+                const imageView460x316 =
+                  '?imageView2/1/w/460/h/316/format/jpg/interlace/1/q/85'
+                url += imageView460x316
+              }
               if (options.promptURLs) {
                 url = options.promptTexts && prompt(options.promptTexts.image)
                 if (!url) {
