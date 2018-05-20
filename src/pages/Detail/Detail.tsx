@@ -82,18 +82,13 @@ class Detail extends React.Component<IProps, IState> {
     const target: HTMLImageElement = ev.target || ev.srcElement
     if (target.nodeName === 'IMG' && !this.state.showBigImage) {
       // 使用client宽高在移动端和pc断切换时为0，所以需要将原生natural宽高储存
-      const bigImageSrc = target.src.replace(/\?.+/, '?imageslim')
-      const image = new Image()
-      image.onload = () => {
-        this.setState({
-          showBigImage: true,
-          bigImageSrc,
-          naturalWidth: image.naturalWidth,
-          naturalHeight: image.naturalHeight,
-          smallImgRect: target.getBoundingClientRect()
-        })
-      }
-      image.src = bigImageSrc
+      this.setState({
+        showBigImage: true,
+        bigImageSrc: target.src,
+        naturalWidth: target.naturalWidth,
+        naturalHeight: target.naturalHeight,
+        smallImgRect: target.getBoundingClientRect()
+      })
     } else {
       this.setState({
         showBigImage: false,
@@ -151,8 +146,12 @@ class Detail extends React.Component<IProps, IState> {
     }
   }
 
-  setEnteringStyle = (el: HTMLImageElement) => {
-    const { naturalWidth, naturalHeight } = this.state
+  setEnteringStyle = (
+    el: HTMLImageElement,
+    bigImageInfo?: { naturalWidth: number; naturalHeight: number }
+  ) => {
+    // const { naturalWidth, naturalHeight } = this.state
+    const { naturalWidth, naturalHeight } = bigImageInfo || el
     const { innerWidth, innerHeight } = window
     const clientScale = naturalWidth / naturalHeight
     const innerScale = innerWidth / innerHeight
@@ -217,12 +216,33 @@ class Detail extends React.Component<IProps, IState> {
   }
   // 在'entering'状态之后应用回调
   entering = (el: HTMLImageElement) => {
-    this.setEnteringStyle(el)
+    const bigImageSrc = this.state.bigImageSrc.replace(/\?.+/, '?imageslim')
+    const img = new Image()
+    img.src = bigImageSrc
+    // 如果已经缓存过这张图片，则直接放大到原图
+    if (img.complete) {
+      el.src = bigImageSrc
+      const bigImageInfo = {
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight
+      }
+      this.setEnteringStyle(el, bigImageInfo)
+    } else {
+      // 否则先将小图移动到中心位置
+      this.setEnteringStyle(el)
+      // 大图加载完成后，再将小图从中心位置放大到原图
+      img.onload = () => {
+        el.src = bigImageSrc
+        const bigImageInfo = {
+          naturalWidth: img.naturalWidth,
+          naturalHeight: img.naturalHeight
+        }
+        this.setEnteringStyle(el, bigImageInfo)
+      }
+    }
   }
   // 在'entered'状态之后应用回调
-  entered = (el: HTMLImageElement) => {
-    console.log('entered', el.getBoundingClientRect())
-  }
+  entered = (el: HTMLImageElement) => {}
   // 在'exiting'状态之前应用回调
   exit = (el: HTMLImageElement) => {
     /* tslint:disable no-unused-expression*/
