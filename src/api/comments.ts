@@ -66,7 +66,14 @@ export const likeComment = async (
 
 // 回复评论
 export const replyComment = async (data: IReplyCommentParams) => {
-  const { articleId, userId, respUserId, commentId, content, isReply = false } = data
+  const {
+    articleId,
+    userId,
+    respUserId,
+    commentId,
+    content,
+    isReply = false
+  } = data
   try {
     const res = await axios.post(
       `${baseUrl}/api/comments/${articleId}/${commentId}/${userId}/reply/${respUserId}`,

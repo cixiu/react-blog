@@ -84,7 +84,6 @@ class Detail extends React.Component<IProps, IState> {
       // 使用client宽高在移动端和pc断切换时为0，所以需要将原生natural宽高储存
       const bigImageSrc = target.src.replace(/\?.+/, '?imageslim')
       const image = new Image()
-      image.src = bigImageSrc
       image.onload = () => {
         this.setState({
           showBigImage: true,
@@ -94,6 +93,7 @@ class Detail extends React.Component<IProps, IState> {
           smallImgRect: target.getBoundingClientRect()
         })
       }
+      image.src = bigImageSrc
     } else {
       this.setState({
         showBigImage: false,
