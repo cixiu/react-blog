@@ -60,7 +60,6 @@ class Detail extends React.Component<IProps, IState> {
   async componentDidMount() {
     // 监听图片的点击事件
     window.addEventListener('click', this.listenImgClick)
-    window.addEventListener('scroll', this.listenScroll)
     const { articleDetail, userId } = this.injected
     const res = await getArticleComments(articleDetail.id, userId)
     if (res.code === 0 && res.data.count) {
@@ -75,12 +74,11 @@ class Detail extends React.Component<IProps, IState> {
   // 组件卸载的时候要移除事件的监听
   componentWillUnmount() {
     window.removeEventListener('click', this.listenImgClick)
-    window.removeEventListener('scroll', this.listenScroll)
   }
 
   listenImgClick = (ev: any) => {
     const target: HTMLImageElement = ev.target || ev.srcElement
-    if (target.nodeName === 'IMG' && !this.state.showBigImage) {
+    if (target.tagName === 'IMG' && !this.state.showBigImage) {
       // 使用client宽高在移动端和pc断切换时为0，所以需要将原生natural宽高储存
       this.setState({
         showBigImage: true,
@@ -89,6 +87,8 @@ class Detail extends React.Component<IProps, IState> {
         naturalHeight: target.naturalHeight,
         smallImgRect: target.getBoundingClientRect()
       })
+      document.documentElement.style.overflow = 'hidden'
+      document.documentElement.style.marginRight = '17px'
     } else {
       this.setState({
         showBigImage: false,
@@ -96,12 +96,8 @@ class Detail extends React.Component<IProps, IState> {
         naturalWidth: 0,
         naturalHeight: 0
       })
-    }
-  }
-  // 监听滚动，图片放大时，scroll事件触发则需要将图片缩小
-  listenScroll = (ev: any) => {
-    if (this.state.showBigImage) {
-      this.setState({ showBigImage: false })
+      document.documentElement.style.overflow = ''
+      document.documentElement.style.marginRight = ''
     }
   }
 
