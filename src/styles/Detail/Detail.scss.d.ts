@@ -18,5 +18,6 @@ export const imageBox: string;
 export const image: string;
 export const fadeEnter: string;
 export const fadeEnterActive: string;
+export const fadeEnterDone: string;
 export const fadeExit: string;
 export const fadeExitActive: string;

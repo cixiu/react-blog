@@ -346,26 +346,27 @@
   bottom: 0;
   left: 0;
   line-height: 0;
-  background: #fff;
   overflow: auto;
 }
 .image {
   position: absolute;
-  transition: all .2s;
+  transition: all .3s;
   cursor: zoom-out;
 }
 .fade-enter {
-  opacity: 0;
+  background-color: rgba(0, 0, 0, 0);
 }
 .fade-enter-active {
-  opacity: 1;
-  transition: all 200ms;
+  background-color: rgba(0, 0, 0, .65);
+  transition: background-color .2s ease-in-out;
 }
-
+.fade-enter-done {
+  background-color: rgba(0, 0, 0, .65);
+}
 .fade-exit {
-  opacity: 1;
+  background-color: rgba(0, 0, 0, .65);
 }
 .fade-exit-active {
-  opacity: 0;
-  transition: all 200ms;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color .2s ease-in-out;
 }

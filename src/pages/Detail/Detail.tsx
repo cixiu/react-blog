@@ -249,7 +249,7 @@ class Detail extends React.Component<IProps, IState> {
     el && el.scrollTop // 强制触发浏览器回流
     /* tslint:enable no-unused-expression*/
     const { width, height, top, left } = el.getBoundingClientRect()
-    el.src = this.state.bigImageSrc
+    // el.src = this.state.bigImageSrc
     el.style.width = `${width}px`
     el.style.height = `${height}px`
     el.style.top = `${top}px`
@@ -367,6 +367,7 @@ class Detail extends React.Component<IProps, IState> {
             classNames={{
               enter: styles.fadeEnter,
               enterActive: styles.fadeEnterActive,
+              enterDone: styles.fadeEnterDone,
               exit: styles.fadeExit,
               exitActive: styles.fadeExitActive
             }}
