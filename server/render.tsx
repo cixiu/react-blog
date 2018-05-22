@@ -56,6 +56,15 @@ const serverRender = ({ clientStats }: { clientStats: Stats }) => async (
           ${helmet.title}
           ${helmet.meta}
           ${styles}
+          <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "https://hm.baidu.com/hm.js?70072fe70de7d9ae79d60b5c73ec1136";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+          </script>
         </head>
         <body>
           <div id="root">${appString}</div>
