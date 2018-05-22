@@ -26,10 +26,10 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name].js',
-    chunkFilename: 'js/[name].js',
+    filename: 'static/js/[name].js',
+    chunkFilename: 'static/js/[name].js',
     path: path.resolve(__dirname, '../dist/buildClient'),
-    publicPath: '/static/'
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json'],
@@ -130,7 +130,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 4096,
-          name: 'images/[name].[ext]?[hash]'
+          name: 'static/images/[name].[ext]?[hash]'
         }
       }
     ]
@@ -138,12 +138,12 @@ module.exports = {
   plugins: [
     // new WriteFilePlugin(), // 强制将打包在内存中的文件写入硬盘，便于查看打包的文件
     new ExtractCssChunks({
-      filename: 'css/[name].css'
+      filename: 'static/css/[name].css'
     }),
     new webpack.WatchIgnorePlugin([/scss\.d\.ts$/]),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['bootstrap'], // needed to put webpack bootstrap code before chunks
-      filename: '[name].js',
+      filename: 'static/js/[name].js',
       minChunks: Infinity
     }),
 
@@ -180,6 +180,7 @@ module.exports = {
     new AutoDllPlugin({
       context: path.join(__dirname, '..'),
       filename: '[name].js',
+      path: 'static/js',
       entry: {
         vendor: [
           'react',

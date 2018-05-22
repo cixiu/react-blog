@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { notification } from 'antd'
+axios.defaults.withCredentials = true
 
 // 当网络状态好时，请求速度过快 导致数据请求时的要展示Loading会一闪而过
 // 所以所有的请求都延迟100ms来查看路由跳转获取数据的Loading过渡效果

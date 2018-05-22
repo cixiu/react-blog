@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true
 const router = express.Router()
 // 后端接口地址
 let baseUrl = 'http://127.0.0.1:3001'
-console.log(process.env.NODE_ENV)
+console.log('NODE_ENV', process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'production') {
   baseUrl = 'https://manage.tzpcc.cn'
 }

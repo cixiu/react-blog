@@ -18,10 +18,10 @@ module.exports = {
     app: ['babel-polyfill', path.resolve(__dirname, '../src/index.tsx')]
   },
   output: {
-    filename: '[name].[chunkhash:8].js',
-    chunkFilename: 'js/[name].[chunkhash:8].js',
+    filename: 'static/js/[name].[chunkhash:8].js',
+    chunkFilename: 'static/js/[name].[chunkhash:8].js',
     path: path.resolve(__dirname, '../dist/buildClient'),
-    publicPath: '/static/'
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json'],
@@ -117,7 +117,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 4096,
-          name: 'images/[name].[ext]?[hash]'
+          name: 'static/images/[name].[ext]?[hash]'
         }
       }
     ]
@@ -125,11 +125,11 @@ module.exports = {
   plugins: [
     new StatsPlugin('stats.json'),
     new ExtractCssChunks({
-      filename: 'css/[name].[contenthash:8].css'
+      filename: 'static/css/[name].[contenthash:8].css'
     }),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['bootstrap'], // needed to put webpack bootstrap code before chunks
-      filename: '[name].[chunkhash:8].js',
+      filename: 'static/js/[name].[chunkhash:8].js',
       minChunks: Infinity
     }),
 
@@ -156,6 +156,7 @@ module.exports = {
     new AutoDllPlugin({
       context: path.join(__dirname, '..'),
       filename: '[name].js',
+      path: 'static/js',
       entry: {
         vendor: [
           'react',
@@ -175,6 +176,7 @@ module.exports = {
           'react-content-loader',
           'react-helmet',
           'react-infinite-scroller',
+          'react-transition-group',
           'simplemde'
         ]
       },

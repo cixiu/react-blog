@@ -61,7 +61,7 @@ const serverRender = ({ clientStats }: { clientStats: Stats }) => async (
           <div id="root">${appString}</div>
           <script>window.REDUX_STATE = ${stateJson}</script>
           ${cssHash}
-          <script type='text/javascript' src='/static/vendor.js'></script>
+          <script type='text/javascript' src='/static/js/vendor.js'></script>
           ${js}
         </body>
       </html>`
