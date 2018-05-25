@@ -37,16 +37,14 @@ Typescript能够解决Javascript的弱类型所带来的痛点。有这么多优
 
 #### 技术栈使用说明
 1. 为什么不用react-router?
-
-答：我们来看下react-router官网上怎么说的。下图是react-router官网截图:
+  答：我们来看下react-router官网上怎么说的。下图是react-router官网截图:
     ![react-router](https://github.com/cixiu/react-blog/raw/master/screenshots/react-router.png)
+
     react官方把code-spliting + server-side-rendering问题的解决方法抛给了开发者个人。幸运的是，react社区足够繁荣，社区已经有造好的轮子来解决这个痛点了。在这里使用 [redux-first-router](https://github.com/faceyspacey/redux-first-router) , [react-universal-component](https://github.com/faceyspacey/react-universal-component) , [babel-plugin-universal-import](https://github.com/faceyspacey/babel-plugin-universal-import) ,  [webpack-flush-chunks](https://github.com/faceyspacey/webpack-flush-chunks) 第三方库配合来做(code-spliting)懒加载。
 2. 为什么不使用webpack4?
-
-答：项目开始的时候webpack4正式版本还没有发布。在webpack4发布后，升级到webpack4，项目直接报错。目前(2018-5-25)， [faceyspacey](https://github.com/faceyspacey)所维护的一套为code-spliting做的插件和库还没有支持webpack4。最近在`webpack-flush-chunks`项目的issue下说，在react发布17版本前是不打算在做更新了。所以最快的解决办法使用webpack3。
+  答：项目开始的时候webpack4正式版本还没有发布。在webpack4发布后，升级到webpack4，项目直接报错。目前(2018-5-25)， [faceyspacey](https://github.com/faceyspacey)所维护的一套为code-spliting做的插件和库还没有支持webpack4。最近在`webpack-flush-chunks`项目的issue下说，在react发布17版本前是不打算在做更新了。所以最快的解决办法使用webpack3。
 3. 为什么使用服务端渲染?
-
-答：服务端渲染优势:
+  答：服务端渲染优势:
       * 服务端直出 HTML 文档，让搜索引擎更容易读取页面内容，有利于 SEO。
       * 不需要客户端执行 JS 就能直接渲染出页面，大大减少了页面白屏的时间。
 
