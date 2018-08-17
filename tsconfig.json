@@ -37,7 +37,11 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "babel-plugin-universal-import/*": ["typings/babel-plugin-universal-import/*"]
+      // "babel-plugin-universal-import/*": ["typings/babel-plugin-universal-import/*"]
+      "*": [
+        "node_modules/*",
+        "typings/*"
+      ]
     },
     "typeRoots": ["./typings", "./node_modules/@types"]
   },

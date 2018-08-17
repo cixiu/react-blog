@@ -1,9 +1,19 @@
-const fs = require('fs')
-const path = require('path')
-const webpack = require('webpack')
-const tsImportPluginFactory = require('ts-import-plugin')
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+const tsImportPluginFactory = require('ts-import-plugin');
+const dotenv = require('dotenv');
 
-const resolve = p => path.resolve(__dirname, p)
+if (fs.existsSync('.env.production')) {
+  console.log('正在使用 .env.production 文件来配置环境变量');
+  dotenv.config({ path: '.env.production' });
+} else {
+  // 如果没有 .env.production 文件， 那么就使用 .env.example 文件作为配置文件
+  console.log('正在使用 .env.example 文件来配置环境变量');
+  dotenv.config({ path: '.env.example' });
+}
+
+const resolve = (p) => path.resolve(__dirname, p);
 
 // if you're specifying externals to leave unbundled, you need to tell Webpack
 // to still bundle `react-universal-component`, `webpack-flush-chunks` and
@@ -12,33 +22,33 @@ const resolve = p => path.resolve(__dirname, p)
 const externals = fs
   .readdirSync(resolve('../node_modules'))
   .filter(
-    x =>
+    (x) =>
       !/\.bin|react-universal-component|require-universal-module|webpack-flush-chunks/.test(
-        x
-      )
+        x,
+      ),
   )
   .reduce((externals, mod) => {
-    externals[mod] = `commonjs ${mod}`
-    return externals
-  }, {})
+    externals[mod] = `commonjs ${mod}`;
+    return externals;
+  }, {});
 
 module.exports = {
   name: 'server',
   target: 'node',
   devtool: 'source-map',
-  entry: [resolve('../server/render.tsx')],
+  entry: resolve('../server/render.tsx'),
   externals,
   output: {
     path: resolve('../dist/buildServer'),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
-    publicPath: '/static/'
+    publicPath: '/static/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts', '.json'],
     alias: {
-      '@': resolve('src')
-    }
+      '@': resolve('src'),
+    },
   },
   module: {
     rules: [
@@ -46,7 +56,7 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         enforce: 'pre',
         loader: 'tslint-loader',
-        exclude: [resolve('node_modules')]
+        exclude: [resolve('node_modules')],
       },
       {
         test: /\.(ts|tsx)$/,
@@ -56,11 +66,8 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrc: true,
-              plugins: [
-                'react-hot-loader/babel',
-                "syntax-dynamic-import"
-              ]
-            }
+              plugins: ['react-hot-loader/babel', 'syntax-dynamic-import'],
+            },
           },
           {
             loader: 'ts-loader',
@@ -72,20 +79,20 @@ module.exports = {
                   tsImportPluginFactory({
                     libraryName: 'antd',
                     libraryDirectory: 'es',
-                    style: 'css'
-                  })
-                ]
-              })
-            }
-          }
-        ]
+                    style: 'css',
+                  }),
+                ],
+              }),
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
         include: /node_modules/,
         use: {
-          loader: 'css-loader/locals'
-        }
+          loader: 'css-loader/locals',
+        },
       },
       {
         test: /\.(css|scss)$/,
@@ -96,31 +103,31 @@ module.exports = {
           loader: 'css-loader/locals',
           options: {
             modules: true,
-            localIdentName: '[name]__[local]--[hash:base64:5]',   // localIdentName格式必须与客户端的css-loader设置一样
-            camelCase: true
-          }
-        }
+            localIdentName: '[name]__[local]--[hash:base64:5]', // localIdentName格式必须与客户端的css-loader设置一样
+            camelCase: true,
+          },
+        },
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 4096,
-          name: 'images/[name].[ext]?[hash]'
-        }
-      }
-    ]
+          name: 'images/[name].[ext]?[hash]',
+        },
+      },
+    ],
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1
+      maxChunks: 1,
     }),
 
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        BASE_URL: JSON.stringify('https://manage.tzpcc.cn')
-      }
-    })
-  ]
-}
+        BASE_URL: JSON.stringify(process.env.PROXY_URL),
+      },
+    }),
+  ],
+};

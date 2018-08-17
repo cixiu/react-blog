@@ -10,3 +10,9 @@ dist
 *.ntvs*
 *.njsproj
 *.sln
+
+ecosystem.json
+
+.env.dev
+.env.production
+.env.test
