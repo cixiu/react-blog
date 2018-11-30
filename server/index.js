@@ -22,23 +22,27 @@ const publicPath = clientConfig.output.publicPath;
 const outputPath = clientConfig.output.path;
 const app = express();
 
+const envDevPath = path.join(__dirname, '../.env.dev')
+const envExamplePath = path.join(__dirname, '../.env.example')
+const envProdPath = path.join(__dirname, '../.env.production')
+
 if (DEV) {
-  if (fs.existsSync('.env.dev')) {
+  if (fs.existsSync(envDevPath)) {
     console.log('正在使用 .env.dev 文件来配置环境变量');
-    dotenv.config({ path: '.env.dev' });
+    dotenv.config({ path: envDevPath });
   } else {
     // 如果没有 .env.dev 文件， 那么就使用 .env.example 文件作为配置文件
     console.log('正在使用 .env.example 文件来配置环境变量');
-    dotenv.config({ path: '.env.example' });
+    dotenv.config({ path: envExamplePath });
   }
 } else {
-  if (fs.existsSync('.env.production')) {
+  if (fs.existsSync(envProdPath)) {
     console.log('正在使用 .env.production 文件来配置环境变量');
-    dotenv.config({ path: '.env.production' });
+    dotenv.config({ path: envProdPath });
   } else {
     // 如果没有 .env.production 文件， 那么就使用 .env.example 文件作为配置文件
     console.log('正在使用 .env.example 文件来配置环境变量');
-    dotenv.config({ path: '.env.example' });
+    dotenv.config({ path: envExamplePath });
   }
 }
 

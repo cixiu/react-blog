@@ -11,7 +11,7 @@ const clientConfig = require('./build/webpack.client.prod');
 const outputPath = clientConfig.output.path;
 const app = express();
 
-dotenv.config({ path: '.env.production' });
+dotenv.config({ path: path.join(__dirname, '.env.production') });
 
 app.use(favicon(path.join(__dirname, './favicon.ico')));
 app.use(cookieParser(process.env.COOKIE_SECRET));
